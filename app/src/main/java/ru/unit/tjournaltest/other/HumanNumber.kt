@@ -4,7 +4,7 @@ import java.text.DecimalFormat
 
 
 fun humanNumber(number: Long): String {
-    if(number <= 0L) return "0"
+    if (number <= 0L) return "0"
 
     val dividers = arrayOf(1000000000L, 1000000L, 1000L, 1L)
     val units = arrayOf("B", "M", "K", "")

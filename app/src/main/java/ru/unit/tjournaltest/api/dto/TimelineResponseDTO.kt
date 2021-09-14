@@ -100,7 +100,7 @@ class TimelineResponseDTODeserializer : JsonDeserializer<TimelineResponseDTO> {
         }.singleOrNull()
 
         var cover: TimelineCoverDTO? = null
-        if(rawCover != null) {
+        if (rawCover != null) {
             cover = deserializeCover(rawCover)
         }
 
@@ -110,7 +110,7 @@ class TimelineResponseDTODeserializer : JsonDeserializer<TimelineResponseDTO> {
     fun deserializeCover(elem: JsonElement): TimelineCoverDTO {
         val obj = elem.asJsonObject
 
-        val type = if(obj.has("type")) {
+        val type = if (obj.has("type")) {
             obj.getAsJsonPrimitive("type").asString
         } else {
             "image"
@@ -120,7 +120,7 @@ class TimelineResponseDTODeserializer : JsonDeserializer<TimelineResponseDTO> {
         var text: TimelineTypeTextDTO? = null
         var image: TimelineTypeImageDTO? = null
 
-        when(type) {
+        when (type) {
             "video" -> video = deserializeTypeVideo(obj.getAsJsonObject("data"))
             "text" -> text = deserializeTypeText(obj.getAsJsonObject("data"))
             "media" -> image = deserializeTypeImage(

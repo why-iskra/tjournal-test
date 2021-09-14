@@ -73,7 +73,7 @@ class TimelineAdapter(
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
 
-        if(item != null) {
+        if (item != null) {
             return when (item.cover?.type) {
                 "text" -> VIEW_TYPE_TEXT_ITEM
                 "image", "media" -> {

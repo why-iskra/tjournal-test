@@ -6,6 +6,12 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
 import ru.unit.tjournaltest.api.dto.TimelineResponseDTO
 
 class TJournal {
@@ -20,36 +26,47 @@ class TJournal {
         private const val videoAndGifsId = 237832
     }
 
-    private val client = HttpClient(Android) {
-        expectSuccess = true
-        install(JsonFeature) {
-            serializer = GsonSerializer {
-                setPrettyPrinting()
-            }
-            accept(ContentType.Application.Json)
-            accept(ContentType.Text.Html)
+    private val client = OkHttpClient.Builder().addInterceptor {
+        return@addInterceptor it.run {
+            proceed(
+                request()
+                    .newBuilder()
+                    .removeHeader("User-Agent")
+                    .addHeader("User-Agent", "Android V1")
+                    .build()
+            )
         }
-        install(Logging) {
-            logger = Logger.ANDROID
-            level = LogLevel.INFO
-        }
-    }
+    }.build()
 
-    suspend fun videoAndGifsRequest(): TimelineResponseDTO {
-        return client.submitForm("$address/timeline", Parameters.build {
-            append("subsitesIds", videoAndGifsId.toString())
-            append("sorting", "hotness")
-            append("allSite", "false")
-        }, true)
-    }
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(address)
+        .client(client)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 
-    suspend fun videoAndGifsRequest(lastId: String, lastSortingValue: String): TimelineResponseDTO {
-        return client.submitForm("$address/timeline", Parameters.build {
-            append("subsitesIds", videoAndGifsId.toString())
-            append("sorting", "hotness")
-            append("allSite", "false")
-            append("lastId", lastId)
-            append("lastSortingValue", lastSortingValue)
-        }, true)
+    private val service = retrofit.create(TJournalService::class.java)
+
+    fun videoAndGifsRequest(): TimelineResponseDTO? =
+        service.videoAndGifs(videoAndGifsId.toString(), "hotness", false).execute().body()
+
+    fun videoAndGifsRequest(lastId: String, lastSortingValue: String): TimelineResponseDTO? =
+        service.videoAndGifs(videoAndGifsId.toString(), "hotness", false, lastId, lastSortingValue).execute().body()
+
+    interface TJournalService {
+        @GET("timeline")
+        fun videoAndGifs(
+            @Query("subsitesIds") subsitesIds: String,
+            @Query("sorting") sorting: String,
+            @Query("allSite") allSite: Boolean
+        ): Call<TimelineResponseDTO>
+
+        @GET("timeline")
+        fun videoAndGifs(
+            @Query("subsitesIds") subsitesIds: String,
+            @Query("sorting") sorting: String,
+            @Query("allSite") allSite: Boolean,
+            @Query("lastId") lastId: String,
+            @Query("lastSortingValue") lastSortingValue: String
+        ): Call<TimelineResponseDTO>
     }
 }

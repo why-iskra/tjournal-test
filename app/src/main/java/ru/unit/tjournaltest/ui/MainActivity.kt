@@ -1,7 +1,7 @@
 package ru.unit.tjournaltest.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import ru.unit.tjournaltest.R
 
 class MainActivity : AppCompatActivity() {

@@ -60,9 +60,9 @@ class TimelineFragment : Fragment() {
             pagedList.detach()
 
             pagedList = PagedList.Builder(TimelineDataSource(), pagedListConfig)
-            .setFetchExecutor(Executors.newSingleThreadExecutor())
-            .setNotifyExecutor(ContextCompat.getMainExecutor(context))
-            .build()
+                .setFetchExecutor(Executors.newSingleThreadExecutor())
+                .setNotifyExecutor(ContextCompat.getMainExecutor(context))
+                .build()
             adapter.submitList(pagedList)
         }
 

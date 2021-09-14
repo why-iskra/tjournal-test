@@ -19,10 +19,14 @@ class TimelineDataSource : PositionalDataSource<TimelineItemDTO>() {
             try {
                 val result = Repository.getTimelineVideoAndGifs()
 
-                lastId = result.lastId
-                lastSortingValue = result.lastSortingValue
+                if (result != null) {
+                    lastId = result.lastId
+                    lastSortingValue = result.lastSortingValue
 
-                callback.onResult(result.items, 0)
+                    callback.onResult(result.items, 0)
+                } else {
+                    callback.onResult(emptyList(), 0)
+                }
             } catch (e: Exception) {
                 // ignore
             }
@@ -37,10 +41,14 @@ class TimelineDataSource : PositionalDataSource<TimelineItemDTO>() {
             try {
                 val result = Repository.getTimelineVideoAndGifs(lastId, lastSortingValue)
 
-                lastId = result.lastId
-                lastSortingValue = result.lastSortingValue
+                if (result != null) {
+                    lastId = result.lastId
+                    lastSortingValue = result.lastSortingValue
 
-                callback.onResult(result.items)
+                    callback.onResult(result.items)
+                } else {
+                    callback.onResult(emptyList())
+                }
             } catch (e: Exception) {
                 // ignore
             }

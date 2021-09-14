@@ -27,7 +27,6 @@ class TimelineYoutubeViewHolder(itemView: View) : TimelineTextViewHolder(itemVie
 
     fun cueVideo(videoId: String) {
         currentVideoId = videoId
-        if (youTubePlayer == null) return
-        youTubePlayer!!.cueVideo(videoId, 0f)
+        youTubePlayer?.cueVideo(videoId, 0f)
     }
 }

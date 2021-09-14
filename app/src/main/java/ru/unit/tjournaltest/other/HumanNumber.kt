@@ -9,7 +9,7 @@ fun humanNumber(number: Long): String {
     val dividers = arrayOf(1000000000L, 1000000L, 1000L, 1L)
     val units = arrayOf("B", "M", "K", "")
 
-    var result: String? = null
+    var result = "wrong value"
     for (i in dividers.indices) {
         val divider = dividers[i]
         if (number >= divider) {
@@ -17,7 +17,7 @@ fun humanNumber(number: Long): String {
             break
         }
     }
-    return result!!
+    return result
 }
 
 private fun format(

@@ -63,7 +63,9 @@ class TimelineResponseDTODeserializer : JsonDeserializer<TimelineResponseDTO> {
         typeOfT: Type?,
         context: JsonDeserializationContext?
     ): TimelineResponseDTO {
-        val obj = json!!.asJsonObject.getAsJsonObject("result")
+        if (json == null) return TimelineResponseDTO("", "", emptyList())
+
+        val obj = json.asJsonObject.getAsJsonObject("result")
 
         val lastId = obj.getAsJsonPrimitive("lastId").asString
         val lastSortingValue = obj.getAsJsonPrimitive("lastSortingValue").asString

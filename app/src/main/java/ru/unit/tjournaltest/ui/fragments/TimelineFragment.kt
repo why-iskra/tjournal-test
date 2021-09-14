@@ -66,9 +66,6 @@ class TimelineFragment : Fragment() {
             adapter.submitList(pagedList)
         }
 
-        // init refresh
-        binding.swipeRefreshLayout.isRefreshing = true
-
         return binding.root
     }
 }

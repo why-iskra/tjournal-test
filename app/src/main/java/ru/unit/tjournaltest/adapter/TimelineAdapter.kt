@@ -1,30 +1,30 @@
-package ru.unit.tjournaltest.adapters
+package ru.unit.tjournaltest.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.exoplayer2.MediaItem
 import com.squareup.picasso.Picasso
 import ru.unit.tjournaltest.R
-import ru.unit.tjournaltest.api.TJournal
+import ru.unit.tjournaltest.adapter.viewholder.*
 import ru.unit.tjournaltest.api.dto.TimelineItemDTO
 import ru.unit.tjournaltest.api.dto.TimelineTypeImageDTO
 import ru.unit.tjournaltest.api.dto.TimelineTypeTextDTO
 import ru.unit.tjournaltest.api.dto.TimelineTypeVideoDTO
+import ru.unit.tjournaltest.api.v2.TJournalV2
 import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.other.dateCountdown
 import ru.unit.tjournaltest.other.humanNumber
-import ru.unit.tjournaltest.viewholders.*
 import java.time.LocalDateTime
 
 class TimelineAdapter(
     recyclerView: RecyclerView,
-    var currentDate: LocalDateTime,
-) : PagedListAdapter<TimelineItemDTO, TimelineViewHolder>(object : DiffUtil.ItemCallback<TimelineItemDTO>() {
+    private var currentDate: LocalDateTime,
+) : PagingDataAdapter<TimelineItemDTO, TimelineViewHolder>(object : DiffUtil.ItemCallback<TimelineItemDTO>() {
     override fun areItemsTheSame(oldItem: TimelineItemDTO, newItem: TimelineItemDTO): Boolean {
         return oldItem.id == newItem.id
     }
@@ -147,7 +147,7 @@ class TimelineAdapter(
         // draw subsite icon
         Picasso
             .with(holder.context)
-            .load(TJournal.genImageRectUrl(item.avatar.uuid, 64))
+            .load(TJournalV2.genImageRectUrl(item.avatar.uuid, 64))
             .transform(RoundCornersTransform(16f))
             .into(holder.imageViewIcon)
     }
@@ -163,7 +163,7 @@ class TimelineAdapter(
         // draw picture
         Picasso
             .with(holder.context)
-            .load(TJournal.genImageUrl(cover.uuid))
+            .load(TJournalV2.genImageUrl(cover.uuid))
             .into(holder.imageView)
     }
 
@@ -174,7 +174,7 @@ class TimelineAdapter(
         if (cover == null) return
 
         // setup player
-        val mediaItem = MediaItem.fromUri(TJournal.genImageGifMP4Url(cover.uuid))
+        val mediaItem = MediaItem.fromUri(TJournalV2.genImageGifMP4Url(cover.uuid))
         val player = holder.videoView?.player
         player?.apply {
             setMediaItem(mediaItem)

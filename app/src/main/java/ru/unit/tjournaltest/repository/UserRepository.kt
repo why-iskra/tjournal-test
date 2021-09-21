@@ -5,7 +5,7 @@ import ru.unit.barsdiary.other.CacheFunction
 object UserRepository {
 
     private val cachedUserMe = CacheFunction {
-        RepositoryApiController.apiV1.userMeRequest()
+        RepositoryApiController.instance.apiV1.userMeRequest()
     }
 
     suspend fun getUserMe() = cachedUserMe()

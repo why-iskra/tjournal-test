@@ -15,7 +15,7 @@ import ru.unit.tjournaltest.api.dto.TimelineItemDTO
 import ru.unit.tjournaltest.api.dto.TimelineTypeImageDTO
 import ru.unit.tjournaltest.api.dto.TimelineTypeTextDTO
 import ru.unit.tjournaltest.api.dto.TimelineTypeVideoDTO
-import ru.unit.tjournaltest.api.v2.TJournalV2
+import ru.unit.tjournaltest.other.DifferentUtils
 import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.other.dateCountdown
 import ru.unit.tjournaltest.other.humanNumber
@@ -147,7 +147,7 @@ class TimelineAdapter(
         // draw subsite icon
         Picasso
             .with(holder.context)
-            .load(TJournalV2.genImageRectUrl(item.avatar.uuid, 64))
+            .load(DifferentUtils.apiGenImageRectUrl(item.avatar.uuid, 64))
             .transform(RoundCornersTransform(16f))
             .into(holder.imageViewIcon)
     }
@@ -163,7 +163,7 @@ class TimelineAdapter(
         // draw picture
         Picasso
             .with(holder.context)
-            .load(TJournalV2.genImageUrl(cover.uuid))
+            .load(DifferentUtils.apiGenImageUrl(cover.uuid))
             .into(holder.imageView)
     }
 
@@ -174,7 +174,7 @@ class TimelineAdapter(
         if (cover == null) return
 
         // setup player
-        val mediaItem = MediaItem.fromUri(TJournalV2.genImageGifMP4Url(cover.uuid))
+        val mediaItem = MediaItem.fromUri(DifferentUtils.apiGenImageGifMP4Url(cover.uuid))
         val player = holder.videoView?.player
         player?.apply {
             setMediaItem(mediaItem)

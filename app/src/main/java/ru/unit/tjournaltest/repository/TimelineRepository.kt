@@ -5,11 +5,11 @@ import ru.unit.barsdiary.other.CacheFunction
 object TimelineRepository {
 
     private val cachedTimelineVideoAndGifsArgs = CacheFunction {
-        RepositoryApiController.apiV2.videoAndGifsRequest(it[0].toString(), it[1].toString())
+        RepositoryApiController.instance.apiV2.videoAndGifsRequest(it[0].toString(), it[1].toString())
     }
 
     private val cachedTimelineVideoAndGifs = CacheFunction {
-        RepositoryApiController.apiV2.videoAndGifsRequest()
+        RepositoryApiController.instance.apiV2.videoAndGifsRequest()
     }
 
     suspend fun getTimelineVideoAndGifs(lastId: String, lastSortingValue: String) = cachedTimelineVideoAndGifsArgs(lastId, lastSortingValue)

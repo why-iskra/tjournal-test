@@ -1,32 +1,32 @@
 package ru.unit.tjournaltest.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collectLatest
+import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.adapter.TimelineAdapter
 import ru.unit.tjournaltest.databinding.FragmentTimelineBinding
 import ru.unit.tjournaltest.viewmodel.TimelineViewModel
 import java.time.LocalDateTime
 
-
-class TimelineFragment : Fragment() {
+class TimelineFragment : Fragment(R.layout.fragment_timeline) {
 
     private val model: TimelineViewModel by activityViewModels()
 
     private lateinit var adapter: TimelineAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentTimelineBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        activity?.findViewById<TextView>(R.id.textViewTitle)?.text = getString(R.string.video_and_gifs)
+
+        val binding = FragmentTimelineBinding.bind(view)
 
         // setup recyclerView
         binding.recyclerViewTimeLine.layoutManager = LinearLayoutManager(context)
@@ -44,14 +44,9 @@ class TimelineFragment : Fragment() {
             adapter.refresh()
         }
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             model.timelineItemsFlow.collectLatest { adapter.submitData(it) }
         }
-        super.onViewCreated(view, savedInstanceState)
     }
 }
 

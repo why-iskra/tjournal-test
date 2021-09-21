@@ -1,10 +1,8 @@
 package ru.unit.tjournaltest.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -15,36 +13,30 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
-import ru.unit.tjournaltest.SharedPreferencesKeys
-import ru.unit.tjournaltest.api.v1.TJournalV1
 import ru.unit.tjournaltest.databinding.FragmentAccountBinding
+import ru.unit.tjournaltest.other.DifferentUtils
 import ru.unit.tjournaltest.other.RoundCornersTransform
-import ru.unit.tjournaltest.repository.RepositoryApiController
+import ru.unit.tjournaltest.other.SharedPreferencesHelper
 import ru.unit.tjournaltest.viewmodel.AccountViewModel
 
-class AccountFragment : Fragment() {
+class AccountFragment : Fragment(R.layout.fragment_account) {
 
     private val model: AccountViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        activity?.let {
-            val token = it.getPreferences(Context.MODE_PRIVATE).getString(SharedPreferencesKeys.xDeviceToken, "") ?: ""
-
-            if (token.isEmpty()) {
-                findNavController().navigate(R.id.action_accountFragment_to_loginFragment)
-            } else {
-                RepositoryApiController.apiV1.setXDeviceToken(token)
-            }
+        if (SharedPreferencesHelper.instance.xDeviceToken.isNullOrEmpty()) {
+            findNavController().navigate(R.id.action_accountFragment_to_loginFragment)
         }
 
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentAccountBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        activity?.findViewById<TextView>(R.id.textViewTitle)?.text = getString(R.string.account)
+
+        val binding = FragmentAccountBinding.bind(view)
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -58,7 +50,7 @@ class AccountFragment : Fragment() {
                                 binding.textViewKarma.text = it2.karma.toString()
                                 Picasso
                                     .with(context)
-                                    .load(TJournalV1.genImageUrl(it2.avatar.data.uuid))
+                                    .load(DifferentUtils.apiGenImageUrl(it2.avatar.data.uuid))
                                     .transform(RoundCornersTransform(16f))
                                     .into(binding.imageViewAvatar)
                             }
@@ -73,8 +65,6 @@ class AccountFragment : Fragment() {
         }
 
         model.loadUserMe()
-
-        return binding.root
     }
 
 }

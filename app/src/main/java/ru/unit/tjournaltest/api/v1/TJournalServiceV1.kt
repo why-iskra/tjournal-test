@@ -1,19 +1,18 @@
 package ru.unit.tjournaltest.api.v1
 
-import okhttp3.RequestBody
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Multipart
 import retrofit2.http.POST
-import retrofit2.http.Part
 import ru.unit.tjournaltest.api.dto.LoginResponseDTO
 import ru.unit.tjournaltest.api.dto.UserResponseDTO
 
 interface TJournalServiceV1 {
-    @Multipart
+    @FormUrlEncoded
     @POST("auth/login")
     suspend fun login(
-        @Part("login") login: RequestBody,
-        @Part("password") password: RequestBody
+        @Field("login") login: String,
+        @Field("password") password: String
     ): LoginResponseDTO
 
     @GET("user/me")

@@ -23,7 +23,7 @@ class LoginViewModel : ViewModel() {
 
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             try {
-                val result = RepositoryApiController.apiV1.login(login, password)
+                val result = RepositoryApiController.instance.login(login, password)
                 resultFlow.value = if (result.success) LoginError.NON else LoginError.UNKNOWN
             } catch (e: HttpException) {
                 resultFlow.value = if (e.code() == 400) LoginError.UNAUTHORIZED else LoginError.UNKNOWN

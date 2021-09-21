@@ -1,11 +1,8 @@
 package ru.unit.tjournaltest.ui.fragment
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -16,35 +13,26 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
-import ru.unit.tjournaltest.SharedPreferencesKeys
 import ru.unit.tjournaltest.databinding.FragmentLoginBinding
-import ru.unit.tjournaltest.repository.RepositoryApiController
+import ru.unit.tjournaltest.other.SharedPreferencesHelper
 import ru.unit.tjournaltest.viewmodel.LoginViewModel
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private val model: LoginViewModel by activityViewModels()
 
-    @SuppressLint("ShowToast")
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentLoginBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        activity?.findViewById<TextView>(R.id.textViewTitle)?.text = getString(R.string.auth)
+
+        val binding = FragmentLoginBinding.bind(view)
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.resultFlow.collect {
                     if (it != null) {
-                        if (it == LoginViewModel.LoginError.NON) {
-                            activity?.run {
-                                getPreferences(Context.MODE_PRIVATE)
-                                    .edit()
-                                    .putString(SharedPreferencesKeys.xDeviceToken, RepositoryApiController.apiV1.getXDeviceToken())
-                                    .apply()
-                            }
-
+                        if (it == LoginViewModel.LoginError.NON && !SharedPreferencesHelper.instance.xDeviceToken.isNullOrEmpty()) {
                             findNavController().navigate(R.id.action_loginFragment_to_accountFragment)
                         } else {
                             Toast.makeText(
@@ -63,8 +51,5 @@ class LoginFragment : Fragment() {
         binding.loginButton.setOnClickListener {
             model.login(binding.editTextLogin.text.toString(), binding.editTextPassword.text.toString())
         }
-
-        return binding.root
     }
-
 }

@@ -12,7 +12,6 @@ class TJournalV2 {
         fun genImageRectUrl(uuid: String, s: Int) = "https://leonardo.osnova.io/%s/-/scale_crop/%dx%d/".format(uuid, s, s)
         fun genImageUrl(uuid: String) = "https://leonardo.osnova.io/%s/".format(uuid)
         fun genImageGifMP4Url(uuid: String) = "https://leonardo.osnova.io/%s/-/format/mp4/".format(uuid)
-//        fun genYouTubeLink(uuid: String) = "https://youtube.com/watch?v=%s".format(uuid)
 
         private const val address = "https://api.tjournal.ru/v2.0/"
         private const val videoAndGifsId = 237832

@@ -9,7 +9,6 @@ class UserAgentInterceptor : Interceptor {
             proceed(
                 request()
                     .newBuilder()
-                    .removeHeader("User-Agent")
                     .addHeader("User-Agent", "Android V1")
                     .build()
             )

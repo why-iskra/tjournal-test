@@ -27,4 +27,12 @@
     <string name="second">секунда</string>
     <string name="seconds">секунды</string>
     <string name="secondsAfterFour">секунд</string>
+    <string name="timeline">Лента</string>
+    <string name="account">Аккаунт</string>
+    <string name="password">Пароль</string>
+    <string name="login">Войти</string>
+    <string name="auth">Авторизация</string>
+    <string name="login_unknown_error">Неизвестная ошибка</string>
+    <string name="login_internal_error">Внутренняя ошибка</string>
+    <string name="login_unauthorized_error">Неправильный логин или пароль</string>
 </resources>

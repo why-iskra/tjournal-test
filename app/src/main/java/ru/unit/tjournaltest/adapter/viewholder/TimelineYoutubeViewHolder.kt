@@ -1,4 +1,4 @@
-package ru.unit.tjournaltest.viewholders
+package ru.unit.tjournaltest.adapter.viewholder
 
 import android.view.View
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer

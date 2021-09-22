@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/timelineFragment"
+        android:icon="@drawable/ic_round_home_24"
+        android:title="@string/timeline" />
+    <item
+        android:id="@+id/accountFragment"
+        android:icon="@drawable/ic_round_person_24"
+        android:title="@string/account" />
+</menu>

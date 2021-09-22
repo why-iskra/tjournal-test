@@ -2,14 +2,19 @@ package ru.unit.tjournaltest.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import ru.unit.tjournaltest.repository.RepositoryApiController
+import ru.unit.tjournaltest.repository.Repository
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    val repository: Repository
+) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, t ->
         resultFlow.value = LoginError.INTERNAL
@@ -23,7 +28,7 @@ class LoginViewModel : ViewModel() {
 
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             try {
-                val result = RepositoryApiController.instance.login(login, password)
+                val result = repository.login(login, password)
                 resultFlow.value = if (result.success) LoginError.NON else LoginError.UNKNOWN
             } catch (e: HttpException) {
                 resultFlow.value = if (e.code() == 400) LoginError.UNAUTHORIZED else LoginError.UNKNOWN

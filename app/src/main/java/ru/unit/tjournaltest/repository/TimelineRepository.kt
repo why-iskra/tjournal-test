@@ -1,15 +1,21 @@
 package ru.unit.tjournaltest.repository
 
 import ru.unit.barsdiary.other.CacheFunction
+import ru.unit.tjournaltest.api.TJournal
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object TimelineRepository {
+@Singleton
+class TimelineRepository @Inject constructor(
+    private val api: TJournal
+) {
 
     private val cachedTimelineVideoAndGifsArgs = CacheFunction {
-        RepositoryApiController.instance.apiV2.videoAndGifsRequest(it[0].toString(), it[1].toString())
+        api.videoAndGifsRequest(it[0].toString(), it[1].toString())
     }
 
     private val cachedTimelineVideoAndGifs = CacheFunction {
-        RepositoryApiController.instance.apiV2.videoAndGifsRequest()
+        api.videoAndGifsRequest()
     }
 
     suspend fun getTimelineVideoAndGifs(lastId: String, lastSortingValue: String) = cachedTimelineVideoAndGifsArgs(lastId, lastSortingValue)

@@ -1,4 +1,4 @@
-package ru.unit.tjournaltest.api.v1
+package ru.unit.tjournaltest.api
 
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

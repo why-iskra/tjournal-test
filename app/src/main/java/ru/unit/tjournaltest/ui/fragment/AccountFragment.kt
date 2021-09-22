@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
@@ -18,13 +19,18 @@ import ru.unit.tjournaltest.other.DifferentUtils
 import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.other.SharedPreferencesHelper
 import ru.unit.tjournaltest.viewmodel.AccountViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AccountFragment : Fragment(R.layout.fragment_account) {
+
+    @Inject
+    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
     private val model: AccountViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (SharedPreferencesHelper.instance.xDeviceToken.isNullOrEmpty()) {
+        if (sharedPreferencesHelper.xDeviceToken.isNullOrEmpty()) {
             findNavController().navigate(R.id.action_accountFragment_to_loginFragment)
         }
 

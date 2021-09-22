@@ -4,10 +4,16 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.other.SharedPreferencesHelper
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.timelineFragment -> navigationController.navigate(R.id.timelineFragment)
                 R.id.accountFragment -> {
-                    if (SharedPreferencesHelper.instance.xDeviceToken.isNullOrEmpty()) {
+                    if (sharedPreferencesHelper.xDeviceToken.isNullOrEmpty()) {
                         navigationController.navigate(R.id.loginFragment)
                     } else {
                         navigationController.navigate(R.id.accountFragment)

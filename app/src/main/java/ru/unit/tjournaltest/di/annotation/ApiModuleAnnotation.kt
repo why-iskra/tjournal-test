@@ -9,11 +9,3 @@ annotation class ApiOkHttpClient
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
 annotation class ApiRetrofitBuilder
-
-@Retention(AnnotationRetention.RUNTIME)
-@Qualifier
-annotation class ApiV1
-
-@Retention(AnnotationRetention.RUNTIME)
-@Qualifier
-annotation class ApiV2

@@ -6,15 +6,10 @@ import javax.inject.Singleton
 
 
 @Singleton
-class Repository @Inject constructor() {
-    @Inject
-    lateinit var api: TJournal
-
-    @Inject
-    lateinit var user: UserRepository
-
-    @Inject
-    lateinit var timeline: TimelineRepository
-
+class Repository @Inject constructor(
+    val api: TJournal,
+    val user: UserRepository,
+    val timeline: TimelineRepository
+) {
     suspend fun login(login: String, password: String) = api.login(login, password)
 }

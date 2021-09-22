@@ -11,10 +11,9 @@ import ru.unit.tjournaltest.repository.Repository
 import javax.inject.Inject
 
 @HiltViewModel
-class AccountViewModel @Inject constructor() : ViewModel() {
-
-    @Inject
-    lateinit var repository: Repository
+class AccountViewModel @Inject constructor(
+    val repository: Repository
+) : ViewModel() {
 
     val userMeFlow = MutableStateFlow<UserResponseDTO?>(null)
 

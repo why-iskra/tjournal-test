@@ -12,10 +12,9 @@ import ru.unit.tjournaltest.repository.Repository
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
-
-    @Inject
-    lateinit var repository: Repository
+class LoginViewModel @Inject constructor(
+    val repository: Repository
+) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, t ->
         resultFlow.value = LoginError.INTERNAL

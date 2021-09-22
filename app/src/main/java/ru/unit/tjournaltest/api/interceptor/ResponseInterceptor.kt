@@ -6,10 +6,9 @@ import ru.unit.tjournaltest.api.Headers
 import ru.unit.tjournaltest.other.SharedPreferencesHelper
 import javax.inject.Inject
 
-class ResponseInterceptor @Inject constructor() : Interceptor {
-
-    @Inject
-    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
+class ResponseInterceptor @Inject constructor(
+    private val sharedPreferencesHelper: SharedPreferencesHelper
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         return chain.run {

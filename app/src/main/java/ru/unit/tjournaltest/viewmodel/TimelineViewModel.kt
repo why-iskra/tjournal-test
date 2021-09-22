@@ -16,10 +16,9 @@ import ru.unit.tjournaltest.repository.Repository
 import javax.inject.Inject
 
 @HiltViewModel
-class TimelineViewModel @Inject constructor() : ViewModel() {
-
-    @Inject
-    lateinit var repository: Repository
+class TimelineViewModel @Inject constructor(
+    val repository: Repository
+) : ViewModel() {
 
     val timelineItemsFlow: Flow<PagingData<TimelineItemDTO>> = Pager(
         config = PagingConfig(pageSize = 10, prefetchDistance = 5),

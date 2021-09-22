@@ -1,4 +1,4 @@
-package ru.unit.tjournaltest.api.v2
+package ru.unit.tjournaltest.api
 
 import retrofit2.http.GET
 import retrofit2.http.Query

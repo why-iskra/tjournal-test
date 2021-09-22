@@ -10,14 +10,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.databinding.FragmentLoginBinding
 import ru.unit.tjournaltest.other.SharedPreferencesHelper
 import ru.unit.tjournaltest.viewmodel.LoginViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
+
+    @Inject
+    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
 
     private val model: LoginViewModel by activityViewModels()
 
@@ -32,7 +38,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.resultFlow.collect {
                     if (it != null) {
-                        if (it == LoginViewModel.LoginError.NON && !SharedPreferencesHelper.instance.xDeviceToken.isNullOrEmpty()) {
+                        if (it == LoginViewModel.LoginError.NON && !sharedPreferencesHelper.xDeviceToken.isNullOrEmpty()) {
                             findNavController().navigate(R.id.action_loginFragment_to_accountFragment)
                         } else {
                             Toast.makeText(

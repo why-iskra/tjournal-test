@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.adapter.TimelineAdapter
@@ -15,6 +16,7 @@ import ru.unit.tjournaltest.databinding.FragmentTimelineBinding
 import ru.unit.tjournaltest.viewmodel.TimelineViewModel
 import java.time.LocalDateTime
 
+@AndroidEntryPoint
 class TimelineFragment : Fragment(R.layout.fragment_timeline) {
 
     private val model: TimelineViewModel by activityViewModels()

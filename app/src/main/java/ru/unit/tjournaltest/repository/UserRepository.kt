@@ -1,11 +1,17 @@
 package ru.unit.tjournaltest.repository
 
 import ru.unit.barsdiary.other.CacheFunction
+import ru.unit.tjournaltest.api.TJournal
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object UserRepository {
+@Singleton
+class UserRepository @Inject constructor(
+    private val api: TJournal
+) {
 
     private val cachedUserMe = CacheFunction {
-        RepositoryApiController.instance.apiV1.userMeRequest()
+        api.userMeRequest()
     }
 
     suspend fun getUserMe() = cachedUserMe()

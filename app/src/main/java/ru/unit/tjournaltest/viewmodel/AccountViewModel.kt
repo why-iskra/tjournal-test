@@ -2,25 +2,31 @@ package ru.unit.tjournaltest.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.api.dto.UserResponseDTO
-import ru.unit.tjournaltest.repository.UserRepository
+import ru.unit.tjournaltest.repository.Repository
+import javax.inject.Inject
 
-class AccountViewModel : ViewModel() {
+@HiltViewModel
+class AccountViewModel @Inject constructor() : ViewModel() {
+
+    @Inject
+    lateinit var repository: Repository
 
     val userMeFlow = MutableStateFlow<UserResponseDTO?>(null)
 
     fun loadUserMe() {
         viewModelScope.launch(Dispatchers.IO) {
-            userMeFlow.value = UserRepository.getUserMe()
+            userMeFlow.value = repository.user.getUserMe()
         }
     }
 
     fun reset() {
         viewModelScope.launch(Dispatchers.IO) {
-            UserRepository.reset()
+            repository.user.reset()
         }
     }
 

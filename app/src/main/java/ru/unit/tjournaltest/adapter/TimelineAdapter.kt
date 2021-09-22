@@ -34,11 +34,13 @@ class TimelineAdapter(
     }
 }) {
 
-    private val VIEW_TYPE_EMPTY_ITEM = 0
-    private val VIEW_TYPE_TEXT_ITEM = 1
-    private val VIEW_TYPE_IMAGE_ITEM = 2
-    private val VIEW_TYPE_VIDEO_ITEM = 3
-    private val VIEW_TYPE_YOUTUBE_ITEM = 4
+    companion object {
+        private const val VIEW_TYPE_EMPTY_ITEM = 0
+        private const val VIEW_TYPE_TEXT_ITEM = 1
+        private const val VIEW_TYPE_IMAGE_ITEM = 2
+        private const val VIEW_TYPE_VIDEO_ITEM = 3
+        private const val VIEW_TYPE_YOUTUBE_ITEM = 4
+    }
 
     init {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {

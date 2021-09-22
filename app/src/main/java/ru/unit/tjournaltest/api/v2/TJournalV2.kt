@@ -4,21 +4,17 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.unit.tjournaltest.api.dto.TimelineResponseDTO
-import ru.unit.tjournaltest.api.interceptor.UserAgentInterceptor
+import ru.unit.tjournaltest.api.interceptor.RequestInterceptor
 
 class TJournalV2 {
 
     companion object {
-        fun genImageRectUrl(uuid: String, s: Int) = "https://leonardo.osnova.io/%s/-/scale_crop/%dx%d/".format(uuid, s, s)
-        fun genImageUrl(uuid: String) = "https://leonardo.osnova.io/%s/".format(uuid)
-        fun genImageGifMP4Url(uuid: String) = "https://leonardo.osnova.io/%s/-/format/mp4/".format(uuid)
-
         private const val address = "https://api.tjournal.ru/v2.0/"
         private const val videoAndGifsId = 237832
     }
 
     private val client = OkHttpClient.Builder()
-        .addInterceptor(UserAgentInterceptor())
+        .addInterceptor(RequestInterceptor())
         .build()
 
     private val retrofit = Retrofit.Builder()

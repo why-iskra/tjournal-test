@@ -2,6 +2,7 @@ package ru.unit.tjournaltest.api.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response
+import ru.unit.tjournaltest.api.Headers
 import ru.unit.tjournaltest.other.SharedPreferencesHelper
 
 class RequestInterceptor : Interceptor {
@@ -10,8 +11,8 @@ class RequestInterceptor : Interceptor {
         return chain.run {
             val request = request()
                 .newBuilder()
-                .addHeader("user-agent", "Android V1")
-                .addHeader("x-device-token", SharedPreferencesHelper.instance.xDeviceToken ?: "")
+                .addHeader(Headers.USER_AGENT_KEY, Headers.USER_AGENT_VALUE)
+                .addHeader(Headers.X_DEVICE_TOKEN_KEY, SharedPreferencesHelper.instance.xDeviceToken ?: "")
                 .build()
 
             proceed(request)

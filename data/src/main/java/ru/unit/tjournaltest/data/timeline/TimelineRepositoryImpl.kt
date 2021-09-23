@@ -9,8 +9,8 @@ class TimelineRepositoryImpl @Inject constructor() : TimelineRepository {
 
     private val cacheVideoAndGifsArgs = RamCache<TimelineEntity>()
 
-    override suspend fun getRamCacheTimelineVideoAndGifs(lastId: String, lastSortingValue: String)
-        = cacheVideoAndGifsArgs.get(lastId, lastSortingValue)
+    override suspend fun getRamCacheTimelineVideoAndGifs(lastId: String, lastSortingValue: String) =
+        cacheVideoAndGifsArgs.get(lastId, lastSortingValue)
 
     override suspend fun putRamCacheTimelineVideoAndGifs(value: TimelineEntity, lastId: String, lastSortingValue: String) {
         cacheVideoAndGifsArgs.put(value, lastId, lastSortingValue)

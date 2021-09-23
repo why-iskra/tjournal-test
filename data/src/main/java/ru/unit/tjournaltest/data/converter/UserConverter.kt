@@ -9,7 +9,7 @@ object UserConverter {
     fun apiResponseToEntity(value: UserResponseDTO): UserEntity {
         var result: UserResultEntity? = null
         val resultApi = value.result
-        if(resultApi != null) {
+        if (resultApi != null) {
             result = UserResultEntity(
                 resultApi.name,
                 resultApi.karma,

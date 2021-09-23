@@ -14,10 +14,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
-import ru.unit.tjournaltest.databinding.FragmentAccountBinding
-import ru.unit.tjournaltest.data.api.DifferentUtils
-import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.data.SharedPreferencesHelper
+import ru.unit.tjournaltest.data.api.DifferentUtils
+import ru.unit.tjournaltest.databinding.FragmentAccountBinding
+import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.viewmodel.AccountViewModel
 import javax.inject.Inject
 

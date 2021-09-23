@@ -14,7 +14,7 @@ class UserUseCaseImpl @Inject constructor(
 ) : UserUseCase {
     override suspend fun getUserMe(): UserEntity {
         val cacheResult = userRepository.getRamCacheUserMe()
-        if(cacheResult != null) {
+        if (cacheResult != null) {
             return cacheResult
         }
 

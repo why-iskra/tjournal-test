@@ -28,7 +28,7 @@ class LoginViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             lateinit var result: AuthEntity
-            runCatching{
+            runCatching {
                 result = authUseCase.login(login, password)
             }.onSuccess {
                 resultFlow.value = if (result.success) LoginError.NON else LoginError.UNKNOWN

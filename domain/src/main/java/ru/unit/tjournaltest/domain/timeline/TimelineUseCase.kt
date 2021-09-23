@@ -14,7 +14,7 @@ class TimelineUseCaseImpl @Inject constructor(
 ) : TimelineUseCase {
     override suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String): TimelineEntity {
         val cacheResult = timelineRepository.getRamCacheTimelineVideoAndGifs(lastId, lastSortingValue)
-        if(cacheResult != null) {
+        if (cacheResult != null) {
             return cacheResult
         }
 

@@ -1,7 +1,5 @@
 package ru.unit.tjournaltest.domain.timeline.entity
 
-import kotlinx.datetime.LocalDateTime
-
 data class TimelineItemEntity(
     val id: Long,
 

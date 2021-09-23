@@ -14,8 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
-import ru.unit.tjournaltest.databinding.FragmentLoginBinding
 import ru.unit.tjournaltest.data.SharedPreferencesHelper
+import ru.unit.tjournaltest.databinding.FragmentLoginBinding
 import ru.unit.tjournaltest.viewmodel.LoginViewModel
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package ru.unit.tjournaltest.api
+package ru.unit.tjournaltest.data.api
 
 object Headers {
     const val USER_AGENT_KEY = "user-agent"

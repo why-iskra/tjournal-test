@@ -1,4 +1,4 @@
-package ru.unit.tjournaltest.other
+package ru.unit.tjournaltest.data.api
 
 object DifferentUtils {
     fun apiGenImageRectUrl(uuid: String, s: Int) = "https://leonardo.osnova.io/%s/-/scale_crop/%dx%d/".format(uuid, s, s)

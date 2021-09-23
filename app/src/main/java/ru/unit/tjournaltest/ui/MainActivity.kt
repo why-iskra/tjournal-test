@@ -6,7 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import ru.unit.tjournaltest.R
-import ru.unit.tjournaltest.other.SharedPreferencesHelper
+import ru.unit.tjournaltest.data.SharedPreferencesHelper
 import javax.inject.Inject
 
 @AndroidEntryPoint

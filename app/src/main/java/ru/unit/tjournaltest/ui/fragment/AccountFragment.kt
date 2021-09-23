@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.databinding.FragmentAccountBinding
-import ru.unit.tjournaltest.other.DifferentUtils
+import ru.unit.tjournaltest.data.api.DifferentUtils
 import ru.unit.tjournaltest.other.RoundCornersTransform
-import ru.unit.tjournaltest.other.SharedPreferencesHelper
+import ru.unit.tjournaltest.data.SharedPreferencesHelper
 import ru.unit.tjournaltest.viewmodel.AccountViewModel
 import javax.inject.Inject
 
@@ -56,7 +56,7 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
                                 binding.textViewKarma.text = it2.karma.toString()
                                 Picasso
                                     .with(context)
-                                    .load(DifferentUtils.apiGenImageUrl(it2.avatar.data.uuid))
+                                    .load(DifferentUtils.apiGenImageUrl(it2.avatar.uuid))
                                     .transform(RoundCornersTransform(16f))
                                     .into(binding.imageViewAvatar)
                             }

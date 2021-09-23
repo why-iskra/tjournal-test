@@ -35,6 +35,9 @@
         <module name="tjournal-test.domain" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="tjournal-test.app" target="11" />
+      <module name="tjournal-test.data" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

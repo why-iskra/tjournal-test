@@ -7,12 +7,15 @@ buildscript {
     }
     ext {
         kotlin_version = '1.5.31'
+        kotlin_coroutines_version = '1.5.0'
+        kotlin_datetime_version = '0.2.1'
+
         gradle_version = '7.0.2'
 
         retrofit_version = '2.9.0'
         androidyoutubeplayer_version = '10.0.5'
         exoplayer_version = '2.15.0'
-        picasso_version = '2.71828'
+        picasso_version = '2.5.2'
         material_version = '1.4.0'
         dagger_version = '2.38.1'
         hilt_version = "$dagger_version"

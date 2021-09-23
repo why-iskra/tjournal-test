@@ -7,13 +7,13 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import ru.unit.tjournaltest.repository.Repository
+import ru.unit.tjournaltest.domain.auth.AuthUseCase
+import ru.unit.tjournaltest.domain.auth.entity.AuthEntity
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    val repository: Repository
+    private val authUseCase: AuthUseCase
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, t ->
@@ -27,11 +27,13 @@ class LoginViewModel @Inject constructor(
         resultFlow.value = null
 
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            try {
-                val result = repository.login(login, password)
+            lateinit var result: AuthEntity
+            runCatching{
+                result = authUseCase.login(login, password)
+            }.onSuccess {
                 resultFlow.value = if (result.success) LoginError.NON else LoginError.UNKNOWN
-            } catch (e: HttpException) {
-                resultFlow.value = if (e.code() == 400) LoginError.UNAUTHORIZED else LoginError.UNKNOWN
+            }.onFailure {
+                resultFlow.value = LoginError.UNAUTHORIZED
             }
         }
     }
@@ -42,8 +44,4 @@ class LoginViewModel @Inject constructor(
         UNAUTHORIZED,
         UNKNOWN
     }
-
-    data class LoginResult(
-        val error: LoginError
-    )
 }

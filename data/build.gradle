@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'kotlin-android'
 }
 
@@ -7,7 +7,6 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "ru.unit.tjournaltest.data"
         minSdk 26
         targetSdk 31
         versionCode 1
@@ -37,4 +36,9 @@ dependencies {
     implementation "androidx.core:core-ktx:$androidx_core_version"
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 }

@@ -1,4 +1,4 @@
-package ru.unit.tjournaltest.other
+package ru.unit.tjournaltest.data
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext

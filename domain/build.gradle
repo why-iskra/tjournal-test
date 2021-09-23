@@ -1,9 +1,16 @@
 plugins {
     id 'kotlin'
+    id 'application'
 }
 
-
 dependencies {
+
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime:$kotlin_datetime_version"
     implementation "com.google.dagger:dagger:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }

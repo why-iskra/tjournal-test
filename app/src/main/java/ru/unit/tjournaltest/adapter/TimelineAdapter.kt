@@ -11,25 +11,26 @@ import com.google.android.exoplayer2.MediaItem
 import com.squareup.picasso.Picasso
 import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.adapter.viewholder.*
-import ru.unit.tjournaltest.api.dto.TimelineItemDTO
-import ru.unit.tjournaltest.api.dto.TimelineTypeImageDTO
-import ru.unit.tjournaltest.api.dto.TimelineTypeTextDTO
-import ru.unit.tjournaltest.api.dto.TimelineTypeVideoDTO
-import ru.unit.tjournaltest.other.DifferentUtils
+import ru.unit.tjournaltest.data.api.DifferentUtils
+import ru.unit.tjournaltest.domain.timeline.entity.TimelineItemEntity
+import ru.unit.tjournaltest.domain.timeline.entity.TimelineTypeImageEntity
+import ru.unit.tjournaltest.domain.timeline.entity.TimelineTypeTextEntity
+import ru.unit.tjournaltest.domain.timeline.entity.TimelineTypeVideoEntity
 import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.other.dateCountdown
 import ru.unit.tjournaltest.other.humanNumber
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class TimelineAdapter(
     recyclerView: RecyclerView,
     private var currentDate: LocalDateTime,
-) : PagingDataAdapter<TimelineItemDTO, TimelineViewHolder>(object : DiffUtil.ItemCallback<TimelineItemDTO>() {
-    override fun areItemsTheSame(oldItem: TimelineItemDTO, newItem: TimelineItemDTO): Boolean {
+) : PagingDataAdapter<TimelineItemEntity, TimelineViewHolder>(object : DiffUtil.ItemCallback<TimelineItemEntity>() {
+    override fun areItemsTheSame(oldItem: TimelineItemEntity, newItem: TimelineItemEntity): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: TimelineItemDTO, newItem: TimelineItemDTO): Boolean {
+    override fun areContentsTheSame(oldItem: TimelineItemEntity, newItem: TimelineItemEntity): Boolean {
         return oldItem == newItem
     }
 }) {
@@ -79,14 +80,14 @@ class TimelineAdapter(
             return when (item.cover?.type) {
                 "text" -> VIEW_TYPE_TEXT_ITEM
                 "image", "media" -> {
-                    if (item.cover.image?.type == "gif") {
+                    if (item.cover?.image?.type == "gif") {
                         VIEW_TYPE_VIDEO_ITEM
                     } else {
                         VIEW_TYPE_IMAGE_ITEM
                     }
                 }
                 "video" -> {
-                    if ((item.cover.video?.externalService?.name ?: "") == "youtube") {
+                    if ((item.cover?.video?.externalService?.name ?: "") == "youtube") {
                         VIEW_TYPE_YOUTUBE_ITEM
                     } else {
                         VIEW_TYPE_VIDEO_ITEM
@@ -132,7 +133,7 @@ class TimelineAdapter(
         holder.textViewComments?.text = humanNumber(item.comments)
         holder.textViewRating?.text = humanNumber(item.rating)
         holder.textViewTime?.text =
-            holder.context?.let { dateCountdown(it, item.date, currentDate) }
+            holder.context?.let { dateCountdown(it, LocalDateTime.ofEpochSecond(item.date, 0, ZoneOffset.UTC), currentDate) }
 
         holder.textViewTitle?.visibility =
             if (item.title.isEmpty()) View.GONE else View.VISIBLE
@@ -147,19 +148,21 @@ class TimelineAdapter(
         }
 
         // draw subsite icon
-        Picasso
-            .with(holder.context)
-            .load(DifferentUtils.apiGenImageRectUrl(item.avatar.uuid, 64))
-            .transform(RoundCornersTransform(16f))
-            .into(holder.imageViewIcon)
+        item.avatar?.let {
+            Picasso
+                .with(holder.context)
+                .load(DifferentUtils.apiGenImageRectUrl(it.uuid, 64))
+                .transform(RoundCornersTransform(16f))
+                .into(holder.imageViewIcon)
+        }
     }
 
-    private fun setupTextCover(holder: TimelineTextViewHolder, cover: TimelineTypeTextDTO?) {
+    private fun setupTextCover(holder: TimelineTextViewHolder, cover: TimelineTypeTextEntity?) {
         if (cover == null) return
         holder.textView?.text = cover.text
     }
 
-    private fun setupImageCover(holder: TimelineImageViewHolder, cover: TimelineTypeImageDTO?) {
+    private fun setupImageCover(holder: TimelineImageViewHolder, cover: TimelineTypeImageEntity?) {
         if (cover == null) return
 
         // draw picture
@@ -171,7 +174,7 @@ class TimelineAdapter(
 
     private fun setupVideoImageCover(
         holder: TimelineVideoViewHolder,
-        cover: TimelineTypeImageDTO?
+        cover: TimelineTypeImageEntity?
     ) {
         if (cover == null) return
 
@@ -187,7 +190,7 @@ class TimelineAdapter(
 
     private fun setupVideoYouTubeCover(
         holder: TimelineYoutubeViewHolder,
-        cover: TimelineTypeVideoDTO?
+        cover: TimelineTypeVideoEntity?
     ) {
         if (cover == null) return
 

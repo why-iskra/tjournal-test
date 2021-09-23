@@ -1,4 +1,4 @@
-package ru.unit.tjournaltest.api.dto
+package ru.unit.tjournaltest.data.api.dto
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer

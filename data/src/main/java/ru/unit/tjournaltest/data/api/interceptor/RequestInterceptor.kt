@@ -1,9 +1,9 @@
-package ru.unit.tjournaltest.api.interceptor
+package ru.unit.tjournaltest.data.api.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response
-import ru.unit.tjournaltest.api.Headers
-import ru.unit.tjournaltest.other.SharedPreferencesHelper
+import ru.unit.tjournaltest.data.SharedPreferencesHelper
+import ru.unit.tjournaltest.data.api.Headers
 import javax.inject.Inject
 
 class RequestInterceptor @Inject constructor(

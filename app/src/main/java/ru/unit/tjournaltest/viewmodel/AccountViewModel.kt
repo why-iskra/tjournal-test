@@ -6,26 +6,26 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import ru.unit.tjournaltest.api.dto.UserResponseDTO
-import ru.unit.tjournaltest.repository.Repository
+import ru.unit.tjournaltest.domain.user.UserUseCase
+import ru.unit.tjournaltest.domain.user.entity.UserEntity
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    val repository: Repository
+    private val userUseCase: UserUseCase
 ) : ViewModel() {
 
-    val userMeFlow = MutableStateFlow<UserResponseDTO?>(null)
+    val userMeFlow = MutableStateFlow<UserEntity?>(null)
 
     fun loadUserMe() {
         viewModelScope.launch(Dispatchers.IO) {
-            userMeFlow.value = repository.user.getUserMe()
+            userMeFlow.value = userUseCase.getUserMe()
         }
     }
 
     fun reset() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.user.reset()
+            userUseCase.clearCache()
         }
     }
 

@@ -7,11 +7,11 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.unit.tjournaltest.api.TJournal
-import ru.unit.tjournaltest.api.TJournalServiceV1
-import ru.unit.tjournaltest.api.TJournalServiceV2
-import ru.unit.tjournaltest.api.interceptor.RequestInterceptor
-import ru.unit.tjournaltest.api.interceptor.ResponseInterceptor
+import ru.unit.tjournaltest.data.api.TJournal
+import ru.unit.tjournaltest.data.api.TJournalServiceV1
+import ru.unit.tjournaltest.data.api.TJournalServiceV2
+import ru.unit.tjournaltest.data.api.interceptor.RequestInterceptor
+import ru.unit.tjournaltest.data.api.interceptor.ResponseInterceptor
 
 @Module
 @InstallIn(SingletonComponent::class)

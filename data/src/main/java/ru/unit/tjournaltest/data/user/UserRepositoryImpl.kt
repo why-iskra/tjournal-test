@@ -1,22 +1,41 @@
 package ru.unit.tjournaltest.data.user
 
-import ru.unit.tjournaltest.data.other.RamCache
+import ru.unit.tjournaltest.data.sharedpreferences.SharedPreferencesUser
 import ru.unit.tjournaltest.domain.user.UserRepository
-import ru.unit.tjournaltest.domain.user.entity.UserEntity
+import ru.unit.tjournaltest.domain.user.pojo.UserPOJO
+import ru.unit.tjournaltest.domain.user.pojo.UserResultPOJO
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor() : UserRepository {
+class UserRepositoryImpl @Inject constructor(
+    private val userPreferences: SharedPreferencesUser
+) : UserRepository {
+    override suspend fun getUserMe(): UserPOJO {
+        val avatarUrl = userPreferences.avatarUrl
+        val name = userPreferences.name
+        val karma = userPreferences.karma
 
-    private val cacheUserMe = RamCache<UserEntity>()
-
-    override suspend fun getRamCacheUserMe(): UserEntity? = cacheUserMe.get()
-
-    override suspend fun putRamCacheUserMe(value: UserEntity) {
-        cacheUserMe.put(value)
+        return if (name.isNullOrEmpty() || avatarUrl.isNullOrEmpty())
+            UserPOJO("data not saved", false, null)
+        else
+            UserPOJO(
+                "",
+                true,
+                UserResultPOJO(
+                    name,
+                    karma,
+                    avatarUrl
+                )
+            )
     }
 
-    override suspend fun clearRamCacheUserMe() {
-        cacheUserMe.clear()
+    override suspend fun putUserMe(value: UserPOJO) {
+        userPreferences.name = value.result?.name
+        userPreferences.karma = value.result?.karma ?: 0
+        userPreferences.avatarUrl = value.result?.avatarUrl
+    }
+
+    override suspend fun clearUserMe() {
+        userPreferences.clear()
     }
 
 }

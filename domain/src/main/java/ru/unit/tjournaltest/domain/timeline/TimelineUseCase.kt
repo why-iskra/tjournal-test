@@ -1,10 +1,10 @@
 package ru.unit.tjournaltest.domain.timeline
 
-import ru.unit.tjournaltest.domain.timeline.entity.TimelineEntity
+import ru.unit.tjournaltest.domain.timeline.pojo.TimelinePOJO
 import javax.inject.Inject
 
 interface TimelineUseCase {
-    suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String): TimelineEntity
+    suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String): TimelinePOJO
     suspend fun clearCache()
 }
 
@@ -12,7 +12,7 @@ class TimelineUseCaseImpl @Inject constructor(
     private val timelineRepository: TimelineRepository,
     private val timelineService: TimelineService
 ) : TimelineUseCase {
-    override suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String): TimelineEntity {
+    override suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String): TimelinePOJO {
         val cacheResult = timelineRepository.getRamCacheTimelineVideoAndGifs(lastId, lastSortingValue)
         if (cacheResult != null) {
             return cacheResult

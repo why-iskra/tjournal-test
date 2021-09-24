@@ -1,9 +1,9 @@
 package ru.unit.tjournaltest.domain.user
 
-import ru.unit.tjournaltest.domain.user.entity.UserEntity
+import ru.unit.tjournaltest.domain.user.pojo.UserPOJO
 
 interface UserRepository {
-    suspend fun getRamCacheUserMe(): UserEntity?
-    suspend fun putRamCacheUserMe(value: UserEntity)
-    suspend fun clearRamCacheUserMe()
+    suspend fun getUserMe(): UserPOJO
+    suspend fun putUserMe(value: UserPOJO)
+    suspend fun clearUserMe()
 }

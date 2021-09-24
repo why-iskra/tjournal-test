@@ -12,10 +12,10 @@ import com.squareup.picasso.Picasso
 import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.adapter.viewholder.*
 import ru.unit.tjournaltest.data.api.DifferentUtils
-import ru.unit.tjournaltest.domain.timeline.entity.TimelineItemEntity
-import ru.unit.tjournaltest.domain.timeline.entity.TimelineTypeImageEntity
-import ru.unit.tjournaltest.domain.timeline.entity.TimelineTypeTextEntity
-import ru.unit.tjournaltest.domain.timeline.entity.TimelineTypeVideoEntity
+import ru.unit.tjournaltest.domain.timeline.pojo.TimelineItemPOJO
+import ru.unit.tjournaltest.domain.timeline.pojo.TimelineTypeImagePOJO
+import ru.unit.tjournaltest.domain.timeline.pojo.TimelineTypeTextPOJO
+import ru.unit.tjournaltest.domain.timeline.pojo.TimelineTypeVideoPOJO
 import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.other.dateCountdown
 import ru.unit.tjournaltest.other.humanNumber
@@ -25,12 +25,12 @@ import java.time.ZoneOffset
 class TimelineAdapter(
     recyclerView: RecyclerView,
     private var currentDate: LocalDateTime,
-) : PagingDataAdapter<TimelineItemEntity, TimelineViewHolder>(object : DiffUtil.ItemCallback<TimelineItemEntity>() {
-    override fun areItemsTheSame(oldItem: TimelineItemEntity, newItem: TimelineItemEntity): Boolean {
+) : PagingDataAdapter<TimelineItemPOJO, TimelineViewHolder>(object : DiffUtil.ItemCallback<TimelineItemPOJO>() {
+    override fun areItemsTheSame(oldItem: TimelineItemPOJO, newItem: TimelineItemPOJO): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: TimelineItemEntity, newItem: TimelineItemEntity): Boolean {
+    override fun areContentsTheSame(oldItem: TimelineItemPOJO, newItem: TimelineItemPOJO): Boolean {
         return oldItem == newItem
     }
 }) {
@@ -150,31 +150,31 @@ class TimelineAdapter(
         // draw subsite icon
         item.avatar?.let {
             Picasso
-                .with(holder.context)
+                .get()
                 .load(DifferentUtils.apiGenImageRectUrl(it.uuid, 64))
                 .transform(RoundCornersTransform(16f))
                 .into(holder.imageViewIcon)
         }
     }
 
-    private fun setupTextCover(holder: TimelineTextViewHolder, cover: TimelineTypeTextEntity?) {
+    private fun setupTextCover(holder: TimelineTextViewHolder, cover: TimelineTypeTextPOJO?) {
         if (cover == null) return
         holder.textView?.text = cover.text
     }
 
-    private fun setupImageCover(holder: TimelineImageViewHolder, cover: TimelineTypeImageEntity?) {
+    private fun setupImageCover(holder: TimelineImageViewHolder, cover: TimelineTypeImagePOJO?) {
         if (cover == null) return
 
         // draw picture
         Picasso
-            .with(holder.context)
+            .get()
             .load(DifferentUtils.apiGenImageUrl(cover.uuid))
             .into(holder.imageView)
     }
 
     private fun setupVideoImageCover(
         holder: TimelineVideoViewHolder,
-        cover: TimelineTypeImageEntity?
+        cover: TimelineTypeImagePOJO?
     ) {
         if (cover == null) return
 
@@ -190,7 +190,7 @@ class TimelineAdapter(
 
     private fun setupVideoYouTubeCover(
         holder: TimelineYoutubeViewHolder,
-        cover: TimelineTypeVideoEntity?
+        cover: TimelineTypeVideoPOJO?
     ) {
         if (cover == null) return
 

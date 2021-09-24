@@ -6,13 +6,13 @@ import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import ru.unit.tjournaltest.R
-import ru.unit.tjournaltest.data.SharedPreferencesHelper
+import ru.unit.tjournaltest.data.sharedpreferences.SharedPreferencesAuth
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject
-    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
+    lateinit var authPreferences: SharedPreferencesAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.timelineFragment -> navigationController.navigate(R.id.timelineFragment)
                 R.id.accountFragment -> {
-                    if (sharedPreferencesHelper.xDeviceToken.isNullOrEmpty()) {
+                    if (authPreferences.xDeviceToken.isNullOrEmpty()) {
                         navigationController.navigate(R.id.loginFragment)
                     } else {
                         navigationController.navigate(R.id.accountFragment)

@@ -4,7 +4,6 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
-import ru.unit.tjournaltest.data.api.dto.LoginResponseDTO
 import ru.unit.tjournaltest.data.api.dto.UserResponseDTO
 
 interface TJournalServiceV1 {
@@ -13,7 +12,7 @@ interface TJournalServiceV1 {
     suspend fun login(
         @Field("login") login: String,
         @Field("password") password: String
-    ): LoginResponseDTO
+    ): UserResponseDTO
 
     @GET("user/me")
     suspend fun userMe(): UserResponseDTO

@@ -1,22 +1,21 @@
 package ru.unit.tjournaltest.data.converter
 
 import ru.unit.tjournaltest.data.api.dto.UserResponseDTO
-import ru.unit.tjournaltest.domain.user.entity.UserAvatarEntity
-import ru.unit.tjournaltest.domain.user.entity.UserEntity
-import ru.unit.tjournaltest.domain.user.entity.UserResultEntity
+import ru.unit.tjournaltest.domain.user.pojo.UserPOJO
+import ru.unit.tjournaltest.domain.user.pojo.UserResultPOJO
 
 object UserConverter {
-    fun apiResponseToEntity(value: UserResponseDTO): UserEntity {
-        var result: UserResultEntity? = null
+    fun apiResponseToPOJO(value: UserResponseDTO): UserPOJO {
+        var result: UserResultPOJO? = null
         val resultApi = value.result
         if (resultApi != null) {
-            result = UserResultEntity(
+            result = UserResultPOJO(
                 resultApi.name,
                 resultApi.karma,
-                UserAvatarEntity(resultApi.avatar.data.type, resultApi.avatar.data.uuid)
+                resultApi.avatarUrl
             )
         }
 
-        return UserEntity(value.message, value.success, result)
+        return UserPOJO(value.message, value.success, result)
     }
 }

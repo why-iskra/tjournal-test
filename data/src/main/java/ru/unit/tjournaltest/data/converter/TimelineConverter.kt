@@ -1,37 +1,37 @@
 package ru.unit.tjournaltest.data.converter
 
 import ru.unit.tjournaltest.data.api.dto.*
-import ru.unit.tjournaltest.domain.timeline.entity.*
+import ru.unit.tjournaltest.domain.timeline.pojo.*
 import java.time.ZoneOffset
 
 object TimelineConverter {
-    fun apiResponseToEntity(value: TimelineResponseDTO) = TimelineEntity(value.lastId, value.lastSortingValue, value.items.map { item ->
-        fun externalService(es: TimelineExternalServiceDTO) = TimelineExternalServiceEntity(
+    fun apiResponseToPOJO(value: TimelineResponseDTO) = TimelinePOJO(value.lastId, value.lastSortingValue, value.items.map { item ->
+        fun externalService(es: TimelineExternalServiceDTO) = TimelineExternalServicePOJO(
             es.id,
             es.name
         )
 
-        fun text(text: TimelineTypeTextDTO?) = if (text != null) TimelineTypeTextEntity(text.text) else null
+        fun text(text: TimelineTypeTextDTO?) = if (text != null) TimelineTypeTextPOJO(text.text) else null
 
-        fun image(image: TimelineTypeImageDTO?) = if (image != null) TimelineTypeImageEntity(
+        fun image(image: TimelineTypeImageDTO?) = if (image != null) TimelineTypeImagePOJO(
             image.type,
             image.uuid
         ) else null
 
-        fun video(video: TimelineTypeVideoDTO?) = if (video != null) TimelineTypeVideoEntity(
-            image(video.thumbnail) ?: TimelineTypeImageEntity("", ""),
+        fun video(video: TimelineTypeVideoDTO?) = if (video != null) TimelineTypeVideoPOJO(
+            image(video.thumbnail) ?: TimelineTypeImagePOJO("", ""),
             video.title,
             externalService(video.externalService)
         ) else null
 
-        fun cover(cover: TimelineCoverDTO?) = if (cover != null) TimelineCoverEntity(
+        fun cover(cover: TimelineCoverDTO?) = if (cover != null) TimelineCoverPOJO(
             cover.type,
             text(cover.text),
             video(cover.video),
             image(cover.image)
         ) else null
 
-        TimelineItemEntity(
+        TimelineItemPOJO(
             item.id,
             item.subsiteName,
             image(item.avatar),

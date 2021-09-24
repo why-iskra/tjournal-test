@@ -14,23 +14,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
-import ru.unit.tjournaltest.data.SharedPreferencesHelper
-import ru.unit.tjournaltest.data.api.DifferentUtils
 import ru.unit.tjournaltest.databinding.FragmentAccountBinding
 import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.viewmodel.AccountViewModel
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AccountFragment : Fragment(R.layout.fragment_account) {
 
-    @Inject
-    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
-
     private val model: AccountViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (sharedPreferencesHelper.xDeviceToken.isNullOrEmpty()) {
+        if (model.isAuthorized()) {
             findNavController().navigate(R.id.action_accountFragment_to_loginFragment)
         }
 
@@ -55,8 +49,8 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
                                 binding.textViewName.text = it2.name
                                 binding.textViewKarma.text = it2.karma.toString()
                                 Picasso
-                                    .with(context)
-                                    .load(DifferentUtils.apiGenImageUrl(it2.avatar.uuid))
+                                    .get()
+                                    .load(it2.avatarUrl)
                                     .transform(RoundCornersTransform(16f))
                                     .into(binding.imageViewAvatar)
                             }

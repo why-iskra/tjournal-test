@@ -3,6 +3,7 @@ package ru.unit.tjournaltest.ui.fragment
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -17,6 +18,7 @@ import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.databinding.FragmentAccountBinding
 import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.viewmodel.AccountViewModel
+import ru.unit.tjournaltest.viewmodel.LoginViewModel
 
 @AndroidEntryPoint
 class AccountFragment : Fragment(R.layout.fragment_account) {
@@ -55,6 +57,11 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
                                     .into(binding.imageViewAvatar)
                             }
                         }
+                    }
+                }
+                model.stateFlow.collect {
+                    if(it == AccountViewModel.State.FAIL) {
+                        Toast.makeText(requireContext(), getString(R.string.fail), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

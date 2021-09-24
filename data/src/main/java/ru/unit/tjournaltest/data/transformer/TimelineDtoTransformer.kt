@@ -1,11 +1,12 @@
-package ru.unit.tjournaltest.data.converter
+package ru.unit.tjournaltest.data.transformer
 
 import ru.unit.tjournaltest.data.api.dto.*
 import ru.unit.tjournaltest.domain.timeline.pojo.*
 import java.time.ZoneOffset
+import javax.inject.Inject
 
-object TimelineConverter {
-    fun apiResponseToPOJO(value: TimelineResponseDTO) = TimelinePOJO(value.lastId, value.lastSortingValue, value.items.map { item ->
+class TimelineDtoTransformer @Inject constructor() : BaseTransformer<TimelineResponseDTO, TimelinePOJO> {
+    override fun transform(value: TimelineResponseDTO) = TimelinePOJO(value.lastId, value.lastSortingValue, value.items.map { item ->
         fun externalService(es: TimelineExternalServiceDTO) = TimelineExternalServicePOJO(
             es.id,
             es.name

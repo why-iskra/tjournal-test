@@ -35,4 +35,6 @@
     <string name="login_unknown_error">Неизвестная ошибка</string>
     <string name="login_internal_error">Внутренняя ошибка</string>
     <string name="login_unauthorized_error">Неправильный логин или пароль</string>
+
+    <string name="fail">Ошибка</string>
 </resources>

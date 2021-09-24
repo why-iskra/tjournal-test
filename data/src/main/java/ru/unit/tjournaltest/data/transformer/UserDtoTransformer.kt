@@ -1,11 +1,12 @@
-package ru.unit.tjournaltest.data.converter
+package ru.unit.tjournaltest.data.transformer
 
 import ru.unit.tjournaltest.data.api.dto.UserResponseDTO
 import ru.unit.tjournaltest.domain.user.pojo.UserPOJO
 import ru.unit.tjournaltest.domain.user.pojo.UserResultPOJO
+import javax.inject.Inject
 
-object UserConverter {
-    fun apiResponseToPOJO(value: UserResponseDTO): UserPOJO {
+class UserDtoTransformer @Inject constructor() : BaseTransformer<UserResponseDTO, UserPOJO> {
+    override fun transform(value: UserResponseDTO): UserPOJO {
         var result: UserResultPOJO? = null
         val resultApi = value.result
         if (resultApi != null) {

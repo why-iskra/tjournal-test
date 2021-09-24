@@ -32,7 +32,6 @@ class LoginViewModel @Inject constructor(
             lateinit var result: UserPOJO
             runCatching {
                 result = userUseCase.login(login, password)
-            }.onSuccess {
                 resultFlow.value = if (result.success) LoginError.NON else LoginError.UNKNOWN
             }.onFailure {
                 it.printStackTrace()

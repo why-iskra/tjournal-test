@@ -18,20 +18,43 @@ class AccountViewModel @Inject constructor(
 ) : ViewModel() {
 
     val userMeFlow = MutableStateFlow<UserPOJO?>(null)
+    val stateFlow = MutableStateFlow<State?>(null)
 
     fun loadUserMe() {
         viewModelScope.launch(Dispatchers.IO) {
-            userMeFlow.value = userUseCase.getUserMe()
+            runCatching {
+                stateFlow.value = State.LOADING
+
+                userMeFlow.value = userUseCase.getUserMe()
+
+                stateFlow.value = State.SUCCESS
+            }.onFailure {
+                stateFlow.value = State.FAIL
+            }
         }
     }
 
     fun refresh() {
         viewModelScope.launch(Dispatchers.IO) {
-            userMeFlow.value = null
-            userUseCase.clearUserMe()
-            userMeFlow.value = userUseCase.getUserMe()
+            runCatching {
+                stateFlow.value = State.LOADING
+
+                userUseCase.clearUserMe()
+                userMeFlow.value = userUseCase.getUserMe()
+
+                stateFlow.value = State.SUCCESS
+            }.onFailure {
+                stateFlow.value = State.FAIL
+            }
         }
     }
 
     fun isAuthorized() = preferencesAuth.xDeviceToken.isNullOrEmpty()
+
+    enum class State {
+        NOTHING,
+        LOADING,
+        SUCCESS,
+        FAIL
+    }
 }

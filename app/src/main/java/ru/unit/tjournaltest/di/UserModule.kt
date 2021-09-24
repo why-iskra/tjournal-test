@@ -11,13 +11,13 @@ import ru.unit.tjournaltest.domain.user.UserService
 import ru.unit.tjournaltest.domain.user.UserUseCase
 import ru.unit.tjournaltest.domain.user.UserUseCaseImpl
 
-@Module(includes = [UserModule.BindsModule::class])
+@Module(includes = [UserModule.UserBindsModule::class])
 @InstallIn(SingletonComponent::class)
 object UserModule {
 
     @Module
     @InstallIn(SingletonComponent::class)
-    abstract class BindsModule {
+    abstract class UserBindsModule {
         @Binds
         abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
 

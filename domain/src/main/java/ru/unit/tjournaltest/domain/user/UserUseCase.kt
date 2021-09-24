@@ -22,7 +22,7 @@ class UserUseCaseImpl @Inject constructor(
 
     override suspend fun getUserMe(): UserPOJO {
         val cacheResult = userRepository.getUserMe()
-        if (cacheResult.result != null) {
+        if (cacheResult != null) {
             return cacheResult
         }
 

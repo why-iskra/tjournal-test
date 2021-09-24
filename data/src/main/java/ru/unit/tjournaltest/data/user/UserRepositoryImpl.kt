@@ -9,13 +9,13 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     private val userPreferences: SharedPreferencesUser
 ) : UserRepository {
-    override suspend fun getUserMe(): UserPOJO {
+    override suspend fun getUserMe(): UserPOJO? {
         val avatarUrl = userPreferences.avatarUrl
         val name = userPreferences.name
         val karma = userPreferences.karma
 
         return if (name.isNullOrEmpty() || avatarUrl.isNullOrEmpty())
-            UserPOJO("data not saved", false, null)
+            null
         else
             UserPOJO(
                 "",

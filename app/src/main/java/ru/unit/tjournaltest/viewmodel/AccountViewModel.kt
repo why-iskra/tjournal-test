@@ -6,35 +6,55 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import ru.unit.tjournaltest.api.dto.UserResponseDTO
-import ru.unit.tjournaltest.repository.Repository
+import ru.unit.tjournaltest.data.sharedpreferences.SharedPreferencesAuth
+import ru.unit.tjournaltest.domain.user.UserUseCase
+import ru.unit.tjournaltest.domain.user.pojo.UserPOJO
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    val repository: Repository
+    private val userUseCase: UserUseCase,
+    private val preferencesAuth: SharedPreferencesAuth
 ) : ViewModel() {
 
-    val userMeFlow = MutableStateFlow<UserResponseDTO?>(null)
+    val userMeFlow = MutableStateFlow<UserPOJO?>(null)
+    val stateFlow = MutableStateFlow<State?>(null)
 
     fun loadUserMe() {
         viewModelScope.launch(Dispatchers.IO) {
-            userMeFlow.value = repository.user.getUserMe()
-        }
-    }
+            runCatching {
+                stateFlow.value = State.LOADING
 
-    fun reset() {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.user.reset()
+                userMeFlow.value = userUseCase.getUserMe()
+
+                stateFlow.value = State.SUCCESS
+            }.onFailure {
+                stateFlow.value = State.FAIL
+            }
         }
     }
 
     fun refresh() {
         viewModelScope.launch(Dispatchers.IO) {
-            userMeFlow.value = null
-            reset()
-            loadUserMe()
+            runCatching {
+                stateFlow.value = State.LOADING
+
+                userUseCase.clearUserMe()
+                userMeFlow.value = userUseCase.getUserMe()
+
+                stateFlow.value = State.SUCCESS
+            }.onFailure {
+                stateFlow.value = State.FAIL
+            }
         }
     }
 
+    fun isAuthorized() = preferencesAuth.xDeviceToken.isNullOrEmpty()
+
+    enum class State {
+        NOTHING,
+        LOADING,
+        SUCCESS,
+        FAIL
+    }
 }

@@ -3,6 +3,7 @@ package ru.unit.tjournaltest.ui.fragment
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -15,22 +16,16 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.databinding.FragmentAccountBinding
-import ru.unit.tjournaltest.other.DifferentUtils
 import ru.unit.tjournaltest.other.RoundCornersTransform
-import ru.unit.tjournaltest.other.SharedPreferencesHelper
 import ru.unit.tjournaltest.viewmodel.AccountViewModel
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AccountFragment : Fragment(R.layout.fragment_account) {
 
-    @Inject
-    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
-
     private val model: AccountViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (sharedPreferencesHelper.xDeviceToken.isNullOrEmpty()) {
+        if (model.isAuthorized()) {
             findNavController().navigate(R.id.action_accountFragment_to_loginFragment)
         }
 
@@ -55,12 +50,17 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
                                 binding.textViewName.text = it2.name
                                 binding.textViewKarma.text = it2.karma.toString()
                                 Picasso
-                                    .with(context)
-                                    .load(DifferentUtils.apiGenImageUrl(it2.avatar.data.uuid))
+                                    .get()
+                                    .load(it2.avatarUrl)
                                     .transform(RoundCornersTransform(16f))
                                     .into(binding.imageViewAvatar)
                             }
                         }
+                    }
+                }
+                model.stateFlow.collect {
+                    if (it == AccountViewModel.State.FAIL) {
+                        Toast.makeText(requireContext(), getString(R.string.fail), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

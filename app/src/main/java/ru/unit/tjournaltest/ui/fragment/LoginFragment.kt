@@ -14,8 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
+import ru.unit.tjournaltest.data.sharedpreferences.SharedPreferencesAuth
 import ru.unit.tjournaltest.databinding.FragmentLoginBinding
-import ru.unit.tjournaltest.other.SharedPreferencesHelper
 import ru.unit.tjournaltest.viewmodel.LoginViewModel
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ import javax.inject.Inject
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
     @Inject
-    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
+    lateinit var authPreferences: SharedPreferencesAuth
 
     private val model: LoginViewModel by activityViewModels()
 
@@ -38,7 +38,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.resultFlow.collect {
                     if (it != null) {
-                        if (it == LoginViewModel.LoginError.NON && !sharedPreferencesHelper.xDeviceToken.isNullOrEmpty()) {
+                        if (it == LoginViewModel.LoginError.NON && !model.isAuthorized()) {
                             findNavController().navigate(R.id.action_loginFragment_to_accountFragment)
                         } else {
                             Toast.makeText(

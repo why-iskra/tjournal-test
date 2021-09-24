@@ -10,24 +10,24 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import ru.unit.tjournaltest.api.dto.TimelineItemDTO
+import ru.unit.tjournaltest.domain.timeline.TimelineUseCase
+import ru.unit.tjournaltest.domain.timeline.pojo.TimelineItemPOJO
 import ru.unit.tjournaltest.paging.source.TimelinePagingSource
-import ru.unit.tjournaltest.repository.Repository
 import javax.inject.Inject
 
 @HiltViewModel
 class TimelineViewModel @Inject constructor(
-    val repository: Repository
+    private val timelineUseCase: TimelineUseCase
 ) : ViewModel() {
 
-    val timelineItemsFlow: Flow<PagingData<TimelineItemDTO>> = Pager(
+    val timelineItemsFlow: Flow<PagingData<TimelineItemPOJO>> = Pager(
         config = PagingConfig(pageSize = 10, prefetchDistance = 5),
-        pagingSourceFactory = { TimelinePagingSource(repository) }
+        pagingSourceFactory = { TimelinePagingSource(timelineUseCase) }
     ).flow.cachedIn(viewModelScope)
 
     fun reset() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.timeline.reset()
+            timelineUseCase.clearCache()
         }
     }
 

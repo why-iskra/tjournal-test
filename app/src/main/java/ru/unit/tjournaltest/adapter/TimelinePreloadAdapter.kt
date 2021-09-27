@@ -3,8 +3,6 @@ package ru.unit.tjournaltest.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.exoplayer2.MediaItem
@@ -22,18 +20,11 @@ import ru.unit.tjournaltest.other.humanNumber
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-class TimelineAdapter(
+class TimelinePreloadAdapter(
     recyclerView: RecyclerView,
+    private val items: List<TimelineItemPOJO>,
     private var currentDate: LocalDateTime,
-) : PagingDataAdapter<TimelineItemPOJO, TimelineViewHolder>(object : DiffUtil.ItemCallback<TimelineItemPOJO>() {
-    override fun areItemsTheSame(oldItem: TimelineItemPOJO, newItem: TimelineItemPOJO): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: TimelineItemPOJO, newItem: TimelineItemPOJO): Boolean {
-        return oldItem == newItem
-    }
-}) {
+) : RecyclerView.Adapter<TimelineViewHolder>() {
 
     companion object {
         private const val VIEW_TYPE_EMPTY_ITEM = 0
@@ -74,29 +65,25 @@ class TimelineAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
+        val item = items[position]
 
-        if (item != null) {
-            return when (item.cover?.type) {
-                "text" -> VIEW_TYPE_TEXT_ITEM
-                "image", "media" -> {
-                    if (item.cover?.image?.type == "gif") {
-                        VIEW_TYPE_VIDEO_ITEM
-                    } else {
-                        VIEW_TYPE_IMAGE_ITEM
-                    }
+        return when (item.cover?.type) {
+            "text" -> VIEW_TYPE_TEXT_ITEM
+            "image", "media" -> {
+                if (item.cover?.image?.type == "gif") {
+                    VIEW_TYPE_VIDEO_ITEM
+                } else {
+                    VIEW_TYPE_IMAGE_ITEM
                 }
-                "video" -> {
-                    if ((item.cover?.video?.externalService?.name ?: "") == "youtube") {
-                        VIEW_TYPE_YOUTUBE_ITEM
-                    } else {
-                        VIEW_TYPE_VIDEO_ITEM
-                    }
-                }
-                else -> VIEW_TYPE_EMPTY_ITEM
             }
-        } else {
-            return VIEW_TYPE_EMPTY_ITEM
+            "video" -> {
+                if ((item.cover?.video?.externalService?.name ?: "") == "youtube") {
+                    VIEW_TYPE_YOUTUBE_ITEM
+                } else {
+                    VIEW_TYPE_VIDEO_ITEM
+                }
+            }
+            else -> VIEW_TYPE_EMPTY_ITEM
         }
     }
 
@@ -125,7 +112,7 @@ class TimelineAdapter(
     }
 
     override fun onBindViewHolder(holder: TimelineViewHolder, position: Int) {
-        val item = getItem(position) ?: return
+        val item = items[position]
 
         // setup views
         holder.textViewAuthor?.text = item.authorName
@@ -204,4 +191,6 @@ class TimelineAdapter(
         // setup youtube player
         holder.cueVideo(cover.externalService.id)
     }
+
+    override fun getItemCount() = items.size
 }

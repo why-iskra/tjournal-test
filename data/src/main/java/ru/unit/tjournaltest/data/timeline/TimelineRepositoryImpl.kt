@@ -1,23 +1,25 @@
 package ru.unit.tjournaltest.data.timeline
 
-import ru.unit.tjournaltest.data.other.RamCache
+import ru.unit.tjournaltest.data.room.DatabaseVar
+import ru.unit.tjournaltest.data.transformer.TimelinePojoToEntityTransformer
 import ru.unit.tjournaltest.domain.timeline.TimelineRepository
 import ru.unit.tjournaltest.domain.timeline.pojo.TimelinePOJO
 import javax.inject.Inject
 
-class TimelineRepositoryImpl @Inject constructor() : TimelineRepository {
+class TimelineRepositoryImpl @Inject constructor(
+    private val room: DatabaseVar,
+    private val timelinePojoToEntityTransformer: TimelinePojoToEntityTransformer
+) : TimelineRepository {
 
-    private val cacheVideoAndGifsArgs = RamCache<TimelinePOJO>()
-
-    override suspend fun getRamCacheTimelineVideoAndGifs(lastId: String, lastSortingValue: String) =
-        cacheVideoAndGifsArgs.get(lastId, lastSortingValue)
-
-    override suspend fun putRamCacheTimelineVideoAndGifs(value: TimelinePOJO, lastId: String, lastSortingValue: String) {
-        cacheVideoAndGifsArgs.put(value, lastId, lastSortingValue)
+    override suspend fun getTimeline(): TimelinePOJO {
+        return timelinePojoToEntityTransformer.revertToList(room.database.timelineDao().getAll().sortedByDescending { it.date })
     }
 
-    override suspend fun clearRamCacheTimelineVideoAndGifs() {
-        cacheVideoAndGifsArgs.clear()
+    override suspend fun putTimeline(value: TimelinePOJO) {
+        val dao = room.database.timelineDao()
+        dao.insertAll(value.items.map {
+            timelinePojoToEntityTransformer.transform(it)
+        }.toList())
     }
 
 }

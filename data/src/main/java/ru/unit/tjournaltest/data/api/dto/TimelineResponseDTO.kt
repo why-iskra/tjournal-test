@@ -31,7 +31,7 @@ data class TimelineItemDTO(
 )
 
 data class TimelineCoverDTO(
-    val type: String,
+    val type: String?,
     val text: TimelineTypeTextDTO?,
     val video: TimelineTypeVideoDTO?,
     val image: TimelineTypeImageDTO?
@@ -42,8 +42,8 @@ data class TimelineTypeTextDTO(
 )
 
 data class TimelineTypeVideoDTO(
-    val thumbnail: TimelineTypeImageDTO,
-    val title: String,
+    val thumbnail: TimelineTypeImageDTO?,
+    val title: String?,
     val externalService: TimelineExternalServiceDTO
 )
 
@@ -74,7 +74,7 @@ class TimelineResponseDTODeserializer : JsonDeserializer<TimelineResponseDTO> {
         return TimelineResponseDTO(lastId, lastSortingValue, items)
     }
 
-    fun deserializeItem(elem: JsonElement): TimelineItemDTO {
+    private fun deserializeItem(elem: JsonElement): TimelineItemDTO {
         val obj = elem.asJsonObject.getAsJsonObject("data")
 
         val subsiteName: String
@@ -107,13 +107,13 @@ class TimelineResponseDTODeserializer : JsonDeserializer<TimelineResponseDTO> {
         return TimelineItemDTO(id, subsiteName, avatar, authorName, title, date, comments, rating, cover)
     }
 
-    fun deserializeCover(elem: JsonElement): TimelineCoverDTO {
+    private fun deserializeCover(elem: JsonElement): TimelineCoverDTO {
         val obj = elem.asJsonObject
 
         val type = if (obj.has("type")) {
             obj.getAsJsonPrimitive("type").asString
         } else {
-            "image"
+            null
         }
 
         var video: TimelineTypeVideoDTO? = null
@@ -141,7 +141,7 @@ class TimelineResponseDTODeserializer : JsonDeserializer<TimelineResponseDTO> {
         return TimelineCoverDTO(type, text, video, image)
     }
 
-    fun deserializeTypeImage(elem: JsonElement): TimelineTypeImageDTO {
+    private fun deserializeTypeImage(elem: JsonElement): TimelineTypeImageDTO {
         val obj = elem.asJsonObject
 
         val type: String
@@ -154,27 +154,27 @@ class TimelineResponseDTODeserializer : JsonDeserializer<TimelineResponseDTO> {
         return TimelineTypeImageDTO(type, uuid)
     }
 
-    fun deserializeTypeVideo(elem: JsonElement): TimelineTypeVideoDTO {
+    private fun deserializeTypeVideo(elem: JsonElement): TimelineTypeVideoDTO {
         val obj = elem.asJsonObject
 
         val video = obj
             .getAsJsonObject("video")
             .getAsJsonObject("data")
 
-        val thumbnail = deserializeTypeImage(video.get("thumbnail"))
+        val thumbnail = if (obj.has("thumbnail")) deserializeTypeImage(video.get("thumbnail")) else null
         val externalService = deserializeExternalService(video.get("external_service"))
-        val title = obj.getAsJsonPrimitive("title").asString
+        val title = if (obj.has("title")) obj.getAsJsonPrimitive("title").asString else null
 
         return TimelineTypeVideoDTO(thumbnail, title, externalService)
     }
 
-    fun deserializeTypeText(elem: JsonElement): TimelineTypeTextDTO {
+    private fun deserializeTypeText(elem: JsonElement): TimelineTypeTextDTO {
         return TimelineTypeTextDTO(
             elem.asJsonObject.getAsJsonPrimitive("text").asString
         )
     }
 
-    fun deserializeExternalService(elem: JsonElement): TimelineExternalServiceDTO {
+    private fun deserializeExternalService(elem: JsonElement): TimelineExternalServiceDTO {
         val obj = elem.asJsonObject
 
         val name = obj.getAsJsonPrimitive("name").asString

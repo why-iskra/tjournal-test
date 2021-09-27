@@ -5,7 +5,7 @@ import ru.unit.tjournaltest.domain.timeline.pojo.*
 import java.time.ZoneOffset
 import javax.inject.Inject
 
-class TimelineDtoTransformer @Inject constructor() : BaseTransformer<TimelineResponseDTO, TimelinePOJO> {
+class TimelineDtoToPojoTransformer @Inject constructor() : BaseTransformer<TimelineResponseDTO, TimelinePOJO> {
     override fun transform(value: TimelineResponseDTO) = TimelinePOJO(value.lastId, value.lastSortingValue, value.items.map { item ->
         fun externalService(es: TimelineExternalServiceDTO) = TimelineExternalServicePOJO(
             es.id,

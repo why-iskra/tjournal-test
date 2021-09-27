@@ -5,7 +5,8 @@ import javax.inject.Inject
 
 interface TimelineUseCase {
     suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String): TimelinePOJO
-    suspend fun clearCache()
+    suspend fun putVideoAndGifs(value: TimelinePOJO)
+    suspend fun getPreloadedVideoAndGifs(): TimelinePOJO
 }
 
 class TimelineUseCaseImpl @Inject constructor(
@@ -13,19 +14,17 @@ class TimelineUseCaseImpl @Inject constructor(
     private val timelineService: TimelineService
 ) : TimelineUseCase {
     override suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String): TimelinePOJO {
-        val cacheResult = timelineRepository.getRamCacheTimelineVideoAndGifs(lastId, lastSortingValue)
-        if (cacheResult != null) {
-            return cacheResult
-        }
-
         val apiResult = timelineService.getVideoAndGifs(lastId, lastSortingValue)
-        timelineRepository.putRamCacheTimelineVideoAndGifs(apiResult, lastId, lastSortingValue)
 
         return apiResult
     }
 
-    override suspend fun clearCache() {
-        timelineRepository.clearRamCacheTimelineVideoAndGifs()
+    override suspend fun putVideoAndGifs(value: TimelinePOJO) {
+        timelineRepository.putTimeline(value)
+    }
+
+    override suspend fun getPreloadedVideoAndGifs(): TimelinePOJO {
+        return timelineRepository.getTimeline()
     }
 
 }

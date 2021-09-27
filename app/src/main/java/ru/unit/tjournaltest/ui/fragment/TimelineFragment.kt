@@ -6,12 +6,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.adapter.TimelineAdapter
+import ru.unit.tjournaltest.adapter.TimelinePreloadAdapter
 import ru.unit.tjournaltest.databinding.FragmentTimelineBinding
 import ru.unit.tjournaltest.viewmodel.TimelineViewModel
 import java.time.LocalDateTime
@@ -42,10 +44,25 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline) {
 
         // setup swipeRefreshLayout
         binding.swipeRefreshLayout.setOnRefreshListener {
-            model.reset()
             adapter.refresh()
         }
 
+        model.init()
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest {
+                if (it.refresh !is LoadState.Loading) {
+                    binding.recyclerViewTimeLine.adapter = adapter
+
+                    binding.swipeRefreshLayout.isRefreshing = false
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            model.preloadFlow.collectLatest {
+                binding.recyclerViewTimeLine.adapter = TimelinePreloadAdapter(binding.recyclerViewTimeLine, it, LocalDateTime.now())
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             model.timelineItemsFlow.collectLatest { adapter.submitData(it) }
         }

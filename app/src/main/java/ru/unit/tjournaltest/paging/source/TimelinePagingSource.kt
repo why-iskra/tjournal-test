@@ -2,6 +2,9 @@ package ru.unit.tjournaltest.paging.source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import ru.unit.tjournaltest.domain.timeline.TimelineUseCase
 import ru.unit.tjournaltest.domain.timeline.pojo.TimelineItemPOJO
 
@@ -21,6 +24,16 @@ class TimelinePagingSource(
         return try {
             val result = timelineUseCase.getVideoAndGifs(key.first, key.second)
 
+            coroutineScope {
+                withContext(Dispatchers.IO) {
+                    kotlin.runCatching {
+                        timelineUseCase.putVideoAndGifs(result)
+                    }.onFailure {
+                        it.printStackTrace()
+                    }
+                }
+            }
+
             LoadResult.Page(
                 data = result.items,
                 prevKey = params.key,
@@ -30,4 +43,6 @@ class TimelinePagingSource(
             LoadResult.Error(e)
         }
     }
+
+
 }

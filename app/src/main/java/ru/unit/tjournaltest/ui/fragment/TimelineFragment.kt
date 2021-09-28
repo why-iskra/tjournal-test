@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,10 +43,17 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline) {
 
         // setup swipeRefreshLayout
         binding.swipeRefreshLayout.setOnRefreshListener {
-            model.reset()
+            model.refresh()
             adapter.refresh()
         }
 
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest {
+                if (it.refresh !is LoadState.Loading) {
+                    binding.swipeRefreshLayout.isRefreshing = false
+                }
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             model.timelineItemsFlow.collectLatest { adapter.submitData(it) }
         }

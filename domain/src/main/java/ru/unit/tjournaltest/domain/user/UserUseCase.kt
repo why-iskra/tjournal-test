@@ -35,5 +35,4 @@ class UserUseCaseImpl @Inject constructor(
     override suspend fun clearUserMe() {
         userRepository.clearUserMe()
     }
-
 }

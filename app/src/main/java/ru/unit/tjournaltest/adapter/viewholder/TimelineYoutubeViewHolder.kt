@@ -1,23 +1,18 @@
 package ru.unit.tjournaltest.adapter.viewholder
 
-import android.view.View
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import ru.unit.tjournaltest.R
+import ru.unit.tjournaltest.databinding.RecyclerTimelineItemBinding
+import ru.unit.tjournaltest.databinding.RecyclerTimelineYoutubeItemBinding
 
-class TimelineYoutubeViewHolder(itemView: View) : TimelineTextViewHolder(itemView) {
-    var youtubeView: YouTubePlayerView? = null
-
+class TimelineYoutubeViewHolder(
+    val bindingYoutube: RecyclerTimelineYoutubeItemBinding
+) : TimelineViewHolder(RecyclerTimelineItemBinding.bind(bindingYoutube.root)) {
     private var youTubePlayer: YouTubePlayer? = null
     private var currentVideoId: String? = null
 
     init {
-        // init views
-        youtubeView = itemView.findViewById(R.id.youtubeView)
-
-        // init players
-        youtubeView?.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+        bindingYoutube.youtubeView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 this@TimelineYoutubeViewHolder.youTubePlayer = youTubePlayer
                 this@TimelineYoutubeViewHolder.youTubePlayer?.cueVideo(currentVideoId ?: "", 0f)

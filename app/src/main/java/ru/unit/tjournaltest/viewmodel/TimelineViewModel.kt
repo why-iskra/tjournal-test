@@ -25,9 +25,9 @@ class TimelineViewModel @Inject constructor(
         pagingSourceFactory = { TimelinePagingSource(timelineUseCase) }
     ).flow.cachedIn(viewModelScope)
 
-    fun reset() {
+    fun refresh() {
         viewModelScope.launch(Dispatchers.IO) {
-            timelineUseCase.clearCache()
+            timelineUseCase.clearVideoAndGifs()
         }
     }
 

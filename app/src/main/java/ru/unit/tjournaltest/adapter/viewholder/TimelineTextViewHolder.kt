@@ -1,14 +1,8 @@
 package ru.unit.tjournaltest.adapter.viewholder
 
-import android.view.View
-import android.widget.TextView
-import ru.unit.tjournaltest.R
+import ru.unit.tjournaltest.databinding.RecyclerTimelineItemBinding
+import ru.unit.tjournaltest.databinding.RecyclerTimelineTextItemBinding
 
-open class TimelineTextViewHolder(itemView: View) : TimelineViewHolder(itemView) {
-    var textView: TextView? = null
-
-    init {
-        // init views
-        textView = itemView.findViewById(R.id.textView)
-    }
-}
+class TimelineTextViewHolder(
+    val bindingText: RecyclerTimelineTextItemBinding
+) : TimelineViewHolder(RecyclerTimelineItemBinding.bind(bindingText.root))

@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.exoplayer2.MediaItem
 import com.squareup.picasso.Picasso
-import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.adapter.viewholder.*
 import ru.unit.tjournaltest.data.api.DifferentUtils
+import ru.unit.tjournaltest.databinding.*
 import ru.unit.tjournaltest.domain.timeline.pojo.TimelineItemPOJO
 import ru.unit.tjournaltest.domain.timeline.pojo.TimelineTypeImagePOJO
 import ru.unit.tjournaltest.domain.timeline.pojo.TimelineTypeTextPOJO
@@ -57,7 +57,7 @@ class TimelineAdapter(
                     val viewHolder =
                         recyclerView.findViewHolderForAdapterPosition(i) as? TimelineViewHolder
                     if (viewHolder is TimelineVideoViewHolder) {
-                        viewHolder.videoView?.player?.playWhenReady =
+                        viewHolder.bindingVideo.videoView.player?.playWhenReady =
                             firstCompletelyVisibleItem == i
                     }
                 }
@@ -67,7 +67,7 @@ class TimelineAdapter(
 
     override fun onViewRecycled(holder: TimelineViewHolder) {
         if (holder is TimelineVideoViewHolder) {
-            holder.videoView?.player?.stop() // stop player before recycling
+            holder.bindingVideo.videoView.player?.stop() // stop player before recycling
         }
 
         super.onViewRecycled(holder)
@@ -102,25 +102,13 @@ class TimelineAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineViewHolder {
         // if plug then use recycler_load_indicator_item, else recycler_timeline_item
-        val itemView = LayoutInflater
-            .from(parent.context)
-            .inflate(
-                when (viewType) {
-                    VIEW_TYPE_TEXT_ITEM -> R.layout.recycler_timeline_text_item
-                    VIEW_TYPE_IMAGE_ITEM -> R.layout.recycler_timeline_image_item
-                    VIEW_TYPE_VIDEO_ITEM -> R.layout.recycler_timeline_video_item
-                    VIEW_TYPE_YOUTUBE_ITEM -> R.layout.recycler_timeline_youtube_item
-                    else -> R.layout.recycler_timeline_item
-                },
-                parent,
-                false
-            )
+        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_TEXT_ITEM -> TimelineTextViewHolder(itemView)
-            VIEW_TYPE_IMAGE_ITEM -> TimelineImageViewHolder(itemView)
-            VIEW_TYPE_VIDEO_ITEM -> TimelineVideoViewHolder(itemView)
-            VIEW_TYPE_YOUTUBE_ITEM -> TimelineYoutubeViewHolder(itemView)
-            else -> TimelineViewHolder(itemView)
+            VIEW_TYPE_TEXT_ITEM -> TimelineTextViewHolder(RecyclerTimelineTextItemBinding.inflate(inflater, parent, false))
+            VIEW_TYPE_IMAGE_ITEM -> TimelineImageViewHolder(RecyclerTimelineImageItemBinding.inflate(inflater, parent, false))
+            VIEW_TYPE_VIDEO_ITEM -> TimelineVideoViewHolder(RecyclerTimelineVideoItemBinding.inflate(inflater, parent, false))
+            VIEW_TYPE_YOUTUBE_ITEM -> TimelineYoutubeViewHolder(RecyclerTimelineYoutubeItemBinding.inflate(inflater, parent, false))
+            else -> TimelineViewHolder(RecyclerTimelineItemBinding.inflate(inflater, parent, false))
         }
     }
 
@@ -128,16 +116,17 @@ class TimelineAdapter(
         val item = getItem(position) ?: return
 
         // setup views
-        holder.textViewAuthor?.text = item.authorName
-        holder.textViewTheme?.text = item.subsiteName
-        holder.textViewComments?.text = humanNumber(item.comments)
-        holder.textViewRating?.text = humanNumber(item.rating)
-        holder.textViewTime?.text =
-            holder.context?.let { dateCountdown(it, LocalDateTime.ofEpochSecond(item.date, 0, ZoneOffset.UTC), currentDate) }
+        holder.binding.textViewAuthor.text = item.authorName
+        holder.binding.textViewTheme.text = item.subsiteName
+        holder.binding.textViewComments.text = humanNumber(item.comments)
+        holder.binding.textViewRating.text = humanNumber(item.rating)
+        holder.binding.textViewTime.text =
+            holder.binding.root.context?.let {
+                dateCountdown(it, LocalDateTime.ofEpochSecond(item.date, 0, ZoneOffset.UTC), currentDate)
+            }
 
-        holder.textViewTitle?.visibility =
-            if (item.title.isEmpty()) View.GONE else View.VISIBLE
-        holder.textViewTitle?.text = item.title
+        holder.binding.textViewTitle.visibility = if (item.title.isNullOrEmpty()) View.GONE else View.VISIBLE
+        holder.binding.textViewTitle.text = item.title
 
         // setup cover
         when (holder) {
@@ -153,13 +142,13 @@ class TimelineAdapter(
                 .get()
                 .load(DifferentUtils.apiGenImageRectUrl(it.uuid, 64))
                 .transform(RoundCornersTransform(16f))
-                .into(holder.imageViewIcon)
+                .into(holder.binding.imageViewIcon)
         }
     }
 
     private fun setupTextCover(holder: TimelineTextViewHolder, cover: TimelineTypeTextPOJO?) {
         if (cover == null) return
-        holder.textView?.text = cover.text
+        holder.bindingText.textView.text = cover.text
     }
 
     private fun setupImageCover(holder: TimelineImageViewHolder, cover: TimelineTypeImagePOJO?) {
@@ -169,7 +158,7 @@ class TimelineAdapter(
         Picasso
             .get()
             .load(DifferentUtils.apiGenImageUrl(cover.uuid))
-            .into(holder.imageView)
+            .into(holder.bindingImage.imageView)
     }
 
     private fun setupVideoImageCover(
@@ -180,8 +169,7 @@ class TimelineAdapter(
 
         // setup player
         val mediaItem = MediaItem.fromUri(DifferentUtils.apiGenImageGifMP4Url(cover.uuid))
-        val player = holder.videoView?.player
-        player?.apply {
+        holder.bindingVideo.videoView.player?.apply {
             setMediaItem(mediaItem)
             prepare()
             play()
@@ -194,11 +182,11 @@ class TimelineAdapter(
     ) {
         if (cover == null) return
 
-        if (cover.title.isEmpty()) {
-            holder.textView?.visibility = View.GONE
+        if (cover.title.isNullOrEmpty()) {
+            holder.bindingYoutube.textView.visibility = View.GONE
         } else {
-            holder.textView?.visibility = View.VISIBLE
-            holder.textView?.text = cover.title
+            holder.bindingYoutube.textView.visibility = View.VISIBLE
+            holder.bindingYoutube.textView.text = cover.title
         }
 
         // setup youtube player

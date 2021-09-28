@@ -19,6 +19,7 @@ buildscript {
         material_version = '1.4.0'
         dagger_version = '2.38.1'
         hilt_version = "$dagger_version"
+        room_version = "2.3.0"
 
         androidx_paging_version = '3.0.1'
         androidx_swiperefreshlayout_version = '1.1.0'

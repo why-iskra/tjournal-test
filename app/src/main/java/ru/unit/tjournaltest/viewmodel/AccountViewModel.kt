@@ -49,7 +49,11 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun isAuthorized() = preferencesAuth.xDeviceToken.isNullOrEmpty()
+    fun isAuthorized() = !preferencesAuth.xDeviceToken.isNullOrEmpty()
+
+    fun logout() {
+        preferencesAuth.xDeviceToken = ""
+    }
 
     enum class State {
         NOTHING,

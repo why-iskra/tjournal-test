@@ -90,8 +90,11 @@ class TimelinePojoToEntityTransformer @Inject constructor() : RevertTransformer<
     }
 
     fun revertToList(list: List<Timeline>): TimelinePOJO {
-        return TimelinePOJO("", "", list.map {
-            revert(it)
-        }.toList())
+        val result = list.map { revert(it) }.toList()
+        return TimelinePOJO(
+            (result.lastOrNull()?.id ?: "").toString(),
+            (result.lastOrNull()?.date ?: "").toString(),
+            result
+        )
     }
 }

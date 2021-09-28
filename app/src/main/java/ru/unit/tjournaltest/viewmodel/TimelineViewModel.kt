@@ -9,7 +9,6 @@ import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.domain.timeline.TimelineUseCase
 import ru.unit.tjournaltest.domain.timeline.pojo.TimelineItemPOJO
@@ -26,13 +25,10 @@ class TimelineViewModel @Inject constructor(
         pagingSourceFactory = { TimelinePagingSource(timelineUseCase) }
     ).flow.cachedIn(viewModelScope)
 
-    val preloadFlow = MutableStateFlow<List<TimelineItemPOJO>>(emptyList())
-
-    fun init() {
+    fun refresh() {
         viewModelScope.launch(Dispatchers.IO) {
-            runCatching {
-                preloadFlow.value = timelineUseCase.getPreloadedVideoAndGifs().items
-            }
+            timelineUseCase.clearVideoAndGifs()
         }
     }
+
 }

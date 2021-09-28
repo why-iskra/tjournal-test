@@ -4,27 +4,27 @@ import ru.unit.tjournaltest.domain.timeline.pojo.TimelinePOJO
 import javax.inject.Inject
 
 interface TimelineUseCase {
-    suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String): TimelinePOJO
-    suspend fun putVideoAndGifs(value: TimelinePOJO)
-    suspend fun getPreloadedVideoAndGifs(): TimelinePOJO
+    suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String, page: Int): TimelinePOJO
+    suspend fun clearVideoAndGifs()
 }
 
 class TimelineUseCaseImpl @Inject constructor(
     private val timelineRepository: TimelineRepository,
     private val timelineService: TimelineService
 ) : TimelineUseCase {
-    override suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String): TimelinePOJO {
-        val apiResult = timelineService.getVideoAndGifs(lastId, lastSortingValue)
-
-        return apiResult
+    override suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String, page: Int): TimelinePOJO {
+        val repoResult = timelineRepository.getTimeline(page)
+        return if (repoResult.items.isNotEmpty()) {
+            repoResult
+        } else {
+            val apiResult = timelineService.getVideoAndGifs(lastId, lastSortingValue)
+            timelineRepository.putTimeline(apiResult)
+            apiResult
+        }
     }
 
-    override suspend fun putVideoAndGifs(value: TimelinePOJO) {
-        timelineRepository.putTimeline(value)
-    }
-
-    override suspend fun getPreloadedVideoAndGifs(): TimelinePOJO {
-        return timelineRepository.getTimeline()
+    override suspend fun clearVideoAndGifs() {
+        timelineRepository.clearTimeline()
     }
 
 }

@@ -11,8 +11,8 @@ class TimelineRepositoryImpl @Inject constructor(
     private val timelinePojoToEntityTransformer: TimelinePojoToEntityTransformer
 ) : TimelineRepository {
 
-    override suspend fun getTimeline(): TimelinePOJO {
-        return timelinePojoToEntityTransformer.revertToList(room.database.timelineDao().getAll().sortedByDescending { it.date })
+    override suspend fun getTimeline(page: Int): TimelinePOJO {
+        return timelinePojoToEntityTransformer.revertToList(room.database.timelineDao().getPage(page))
     }
 
     override suspend fun putTimeline(value: TimelinePOJO) {
@@ -20,6 +20,10 @@ class TimelineRepositoryImpl @Inject constructor(
         dao.insertAll(value.items.map {
             timelinePojoToEntityTransformer.transform(it)
         }.toList())
+    }
+
+    override suspend fun clearTimeline() {
+        room.database.timelineDao().deleteAll()
     }
 
 }

@@ -12,6 +12,6 @@ class TimelineServiceImpl @Inject constructor(
 ) : TimelineService {
 
     override suspend fun getVideoAndGifs(lastId: String, lastSortingValue: String) =
-        timelineDtoToPojoTransformer.transform(apiV2.videoAndGifs(TJournal.videoAndGifsId, "hotness", false, lastId, lastSortingValue))
+        timelineDtoToPojoTransformer.transform(apiV2.videoAndGifs(TJournal.videoAndGifsId, "date", false, lastId, lastSortingValue))
 
 }

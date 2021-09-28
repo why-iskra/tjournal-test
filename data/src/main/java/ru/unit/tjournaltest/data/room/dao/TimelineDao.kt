@@ -9,10 +9,12 @@ import ru.unit.tjournaltest.data.room.entity.Timeline
 
 @Dao
 interface TimelineDao {
-    @Query("SELECT * FROM timeline")
-    fun getAll(): List<Timeline>
+    @Query("SELECT * FROM timeline ORDER BY date DESC LIMIT 10 OFFSET :page * 10")
+    fun getPage(page: Int): List<Timeline>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(timeline: List<Timeline>)
 
+    @Query("DELETE FROM timeline")
+    fun deleteAll()
 }

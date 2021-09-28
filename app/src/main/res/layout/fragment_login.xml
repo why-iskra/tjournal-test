@@ -1,53 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.LoginFragment"
-    android:layout_marginStart="64dp"
-    android:layout_marginTop="32dp"
-    android:layout_marginEnd="64dp"
-    android:layout_marginBottom="32dp"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editTextLogin"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints="emailAddress"
-        android:backgroundTint="@color/black"
-        android:drawableTint="@color/black"
-        android:ems="10"
-        android:fontFamily="@font/sfpro_text_regular"
-        android:hint="@string/login"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:textColor="@color/black_700"
-        android:textColorHint="@color/black_500" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".ui.fragment.LoginFragment">
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:autofillHints="password"
-        android:backgroundTint="@color/black"
-        android:ems="10"
-        android:fontFamily="@font/sfpro_text_regular"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        android:textColor="@color/black_700"
-        android:textColorHint="@color/black_500" />
+        <EditText
+            android:id="@+id/editTextLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="emailAddress"
+            android:backgroundTint="@color/black"
+            android:drawableTint="@color/black"
+            android:ems="10"
+            android:fontFamily="@font/sfpro_text_regular"
+            android:hint="@string/login"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:textColor="@color/black_700"
+            android:textColorHint="@color/black_500" />
 
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints="password"
+            android:backgroundTint="@color/black"
+            android:ems="10"
+            android:fontFamily="@font/sfpro_text_regular"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:textColor="@color/black_700"
+            android:textColorHint="@color/black_500" />
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:fontFamily="@font/sfpro_text_bold"
+            android:text="@string/login"
+            app:cornerRadius="32dp" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:fontFamily="@font/sfpro_text_bold"
-        android:text="@string/login"
-        app:cornerRadius="32dp" />
-</LinearLayout>
+        android:indeterminate="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

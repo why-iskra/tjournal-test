@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.data.sharedpreferences.SharedPreferencesAuth
 import ru.unit.tjournaltest.domain.user.UserUseCase
-import ru.unit.tjournaltest.domain.user.pojo.UserPOJO
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,34 +17,34 @@ class LoginViewModel @Inject constructor(
     private val preferencesAuth: SharedPreferencesAuth
 ) : ViewModel() {
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, t ->
-        resultFlow.value = LoginError.INTERNAL
-        t.printStackTrace()
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
+        stateFlow.value = State.ERROR_INTERNAL
     }
 
-    val resultFlow = MutableStateFlow<LoginError?>(null)
+    val stateFlow = MutableStateFlow(State.NOTHING)
 
     fun login(login: String, password: String) {
-        resultFlow.value = null
+        stateFlow.value = State.LOADING
 
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            lateinit var result: UserPOJO
             runCatching {
-                result = userUseCase.login(login, password)
-                resultFlow.value = if (result.success) LoginError.NON else LoginError.UNKNOWN
+                val result = userUseCase.login(login, password)
+                stateFlow.value = if (result.success) State.LOADED else State.ERROR_UNKNOWN
             }.onFailure {
                 it.printStackTrace()
-                resultFlow.value = LoginError.UNAUTHORIZED
+                stateFlow.value = State.ERROR_UNAUTHORIZED
             }
         }
     }
 
-    fun isAuthorized() = preferencesAuth.xDeviceToken.isNullOrEmpty()
+    fun isAuthorized() = !preferencesAuth.xDeviceToken.isNullOrEmpty()
 
-    enum class LoginError {
-        NON,
-        INTERNAL,
-        UNAUTHORIZED,
-        UNKNOWN
+    enum class State {
+        NOTHING,
+        LOADING,
+        LOADED,
+        ERROR_INTERNAL,
+        ERROR_UNAUTHORIZED,
+        ERROR_UNKNOWN
     }
 }

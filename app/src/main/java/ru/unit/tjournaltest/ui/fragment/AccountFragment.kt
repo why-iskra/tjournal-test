@@ -25,7 +25,7 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
     private val model: AccountViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (model.isAuthorized()) {
+        if (!model.isAuthorized()) {
             findNavController().navigate(R.id.action_accountFragment_to_loginFragment)
         }
 
@@ -68,6 +68,11 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             model.refresh()
+        }
+
+        binding.logoutButton.setOnClickListener {
+            model.logout()
+            findNavController().navigate(R.id.action_accountFragment_to_loginFragment)
         }
 
         model.loadUserMe()

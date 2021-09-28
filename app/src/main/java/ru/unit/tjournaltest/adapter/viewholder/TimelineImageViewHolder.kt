@@ -1,14 +1,8 @@
 package ru.unit.tjournaltest.adapter.viewholder
 
-import android.view.View
-import android.widget.ImageView
-import ru.unit.tjournaltest.R
+import ru.unit.tjournaltest.databinding.RecyclerTimelineImageItemBinding
+import ru.unit.tjournaltest.databinding.RecyclerTimelineItemBinding
 
-class TimelineImageViewHolder(itemView: View) : TimelineViewHolder(itemView) {
-    var imageView: ImageView? = null
-
-    init {
-        // init views
-        imageView = itemView.findViewById(R.id.imageView)
-    }
-}
+class TimelineImageViewHolder(
+    val bindingImage: RecyclerTimelineImageItemBinding
+) : TimelineViewHolder(RecyclerTimelineItemBinding.bind(bindingImage.root))

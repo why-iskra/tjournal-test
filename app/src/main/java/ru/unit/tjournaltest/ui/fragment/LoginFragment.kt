@@ -36,18 +36,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                model.resultFlow.collect {
-                    if (it != null) {
-                        if (it == LoginViewModel.LoginError.NON && !model.isAuthorized()) {
-                            findNavController().navigate(R.id.action_loginFragment_to_accountFragment)
-                        } else {
-                            Toast.makeText(
-                                requireContext(), when (it) {
-                                    LoginViewModel.LoginError.INTERNAL -> R.string.login_internal_error
-                                    LoginViewModel.LoginError.UNAUTHORIZED -> R.string.login_unauthorized_error
-                                    else -> R.string.login_unknown_error
-                                }, Toast.LENGTH_SHORT
-                            ).show()
+                model.stateFlow.collect {
+                    if (it == LoginViewModel.State.LOADING) {
+                        binding.progressBar.visibility = View.VISIBLE
+                    } else {
+                        binding.progressBar.visibility = View.GONE
+                        when (it) {
+                            LoginViewModel.State.LOADED -> loginComplete()
+                            LoginViewModel.State.ERROR_UNAUTHORIZED -> toastUnauthorized()
+                            LoginViewModel.State.ERROR_UNKNOWN -> toastUnknown()
+                            LoginViewModel.State.ERROR_INTERNAL -> toastInternal()
                         }
                     }
                 }
@@ -57,5 +55,23 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.loginButton.setOnClickListener {
             model.login(binding.editTextLogin.text.toString(), binding.editTextPassword.text.toString())
         }
+    }
+
+    private fun loginComplete() {
+        if (model.isAuthorized()) {
+            findNavController().navigate(R.id.action_loginFragment_to_accountFragment)
+        }
+    }
+
+    private fun toastUnauthorized() {
+        Toast.makeText(requireContext(), R.string.login_unauthorized_error, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun toastUnknown() {
+        Toast.makeText(requireContext(), R.string.login_unknown_error, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun toastInternal() {
+        Toast.makeText(requireContext(), R.string.login_internal_error, Toast.LENGTH_SHORT).show()
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -43,9 +44,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         binding.progressBar.visibility = View.GONE
                         when (it) {
                             LoginViewModel.State.LOADED -> loginComplete()
-                            LoginViewModel.State.ERROR_UNAUTHORIZED -> toastUnauthorized()
-                            LoginViewModel.State.ERROR_UNKNOWN -> toastUnknown()
-                            LoginViewModel.State.ERROR_INTERNAL -> toastInternal()
+                            LoginViewModel.State.ERROR_UNAUTHORIZED -> toast(R.string.login_unauthorized_error)
+                            LoginViewModel.State.ERROR_UNKNOWN -> toast(R.string.login_unknown_error)
+                            LoginViewModel.State.ERROR_INTERNAL -> toast(R.string.login_internal_error)
                         }
                     }
                 }
@@ -63,15 +64,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    private fun toastUnauthorized() {
-        Toast.makeText(requireContext(), R.string.login_unauthorized_error, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun toastUnknown() {
-        Toast.makeText(requireContext(), R.string.login_unknown_error, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun toastInternal() {
-        Toast.makeText(requireContext(), R.string.login_internal_error, Toast.LENGTH_SHORT).show()
+    private fun toast(@StringRes message: Int) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

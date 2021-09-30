@@ -15,9 +15,7 @@ class SharedPreferencesHelper @Inject constructor(
 
         const val XDEVICETOKEN_KEY = "xdevicetoken"
 
-        const val AVATAR_URL_KEY = "avatar_url"
-        const val NAME_KEY = "name"
-        const val KARMA_KEY = "karma"
+        const val USER_ME_KEY = "user_me"
     }
 
     fun get(): SharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)

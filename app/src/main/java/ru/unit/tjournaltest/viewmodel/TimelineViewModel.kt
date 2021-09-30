@@ -30,5 +30,4 @@ class TimelineViewModel @Inject constructor(
             timelineUseCase.clearVideoAndGifs()
         }
     }
-
 }

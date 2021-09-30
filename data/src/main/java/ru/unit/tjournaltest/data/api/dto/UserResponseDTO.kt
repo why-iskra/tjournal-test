@@ -17,7 +17,9 @@ data class UserResponseDTO(
 data class UserInfoDTO(
     @SerializedName("name") val name: String,
     @SerializedName("karma") val karma: Int,
-    @SerializedName("avatar_url") val avatarUrl: String?
+    @SerializedName("avatar_url") val avatarUrl: String?,
+    @SerializedName("m_hash") val mHash: String?,
+    @SerializedName("user_hash") val userHash: String?
 )
 
 class UserResponseDTODeserializer : JsonDeserializer<UserResponseDTO> {

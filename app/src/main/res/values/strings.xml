@@ -1,32 +1,4 @@
 <resources>
-    <string name="app_name">tjournal-test</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="video_and_gifs">Видео и гифки</string>
-
-    <string name="year">год</string>
-    <string name="years">года</string>
-    <string name="yearsAfterFour">лет</string>
-
-    <string name="month">месяц</string>
-    <string name="months">месяца</string>
-    <string name="monthsAfterFour">месяцев</string>
-
-    <string name="day">день</string>
-    <string name="days">дня</string>
-    <string name="daysAfterFour">дней</string>
-
-    <string name="hour">час</string>
-    <string name="hours">часа</string>
-    <string name="hoursAfterFour">часов</string>
-
-    <string name="minute">минута</string>
-    <string name="minutes">минуты</string>
-    <string name="minutesAfterFour">минут</string>
-
-    <string name="second">секунда</string>
-    <string name="seconds">секунды</string>
-    <string name="secondsAfterFour">секунд</string>
     <string name="timeline">Лента</string>
     <string name="account">Аккаунт</string>
     <string name="password">Пароль</string>

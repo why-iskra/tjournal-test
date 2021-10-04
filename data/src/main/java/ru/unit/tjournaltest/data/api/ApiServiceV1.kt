@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import ru.unit.tjournaltest.data.api.dto.UserResponseDTO
 
-interface TJournalServiceV1 {
+interface ApiServiceV1 {
     @FormUrlEncoded
     @POST("auth/login")
     suspend fun login(

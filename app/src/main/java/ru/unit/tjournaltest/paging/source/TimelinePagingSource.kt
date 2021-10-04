@@ -24,7 +24,7 @@ class TimelinePagingSource(
         return try {
             lateinit var result: TimelinePOJO
             withContext(Dispatchers.IO) {
-                result = timelineUseCase.getVideoAndGifs(key.lastId, key.lastSortingId, key.page)
+                result = timelineUseCase.getSubsite(key.lastId, key.lastSortingId, key.page)
             }
 
             LoadResult.Page(

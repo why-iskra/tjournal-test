@@ -12,6 +12,7 @@ import io.socket.engineio.client.EngineIOException
 import io.socket.engineio.client.transports.WebSocket
 import kotlinx.coroutines.flow.MutableStateFlow
 import okhttp3.OkHttpClient
+import ru.unit.tjournaltest.data.DataConfig
 import ru.unit.tjournaltest.data.json.annotation.GsonSimple
 import ru.unit.tjournaltest.data.sharedpreferences.SharedPreferencesUser
 import ru.unit.tjournaltest.data.socket.annotation.SocketEventFlow
@@ -36,6 +37,7 @@ object SocketModule {
     @Singleton
     @Provides
     fun provideSocket(
+        dataConfig: DataConfig,
         okHttpClient: OkHttpClient,
         userPreferences: SharedPreferencesUser,
         @SocketEventFlow socketEventFlow: MutableStateFlow<ChannelDTO?>,
@@ -46,7 +48,7 @@ object SocketModule {
         val options = IO.Options().apply {
             transports = arrayOf(WebSocket.NAME)
         }
-        val socket = IO.socket("https://ws-sio.tjournal.ru", options)
+        val socket = IO.socket(dataConfig.baseSocketHost, options)
 
         socket.on(Socket.EVENT_CONNECT) {
             socket.subscribeToChannels(userPreferences.userMe?.result?.mHash)

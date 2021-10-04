@@ -11,7 +11,7 @@ class SharedPreferencesHelper @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     companion object {
-        private const val PREFERENCES_NAME = "tj"
+        private const val PREFERENCES_NAME = "main"
 
         const val XDEVICETOKEN_KEY = "xdevicetoken"
 

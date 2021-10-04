@@ -9,9 +9,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.unit.tjournaltest.BuildConfig
-import ru.unit.tjournaltest.data.api.TJournal
-import ru.unit.tjournaltest.data.api.TJournalServiceV1
-import ru.unit.tjournaltest.data.api.TJournalServiceV2
+import ru.unit.tjournaltest.data.api.ApiConfig
+import ru.unit.tjournaltest.data.api.ApiServiceV1
+import ru.unit.tjournaltest.data.api.ApiServiceV2
 import ru.unit.tjournaltest.data.api.interceptor.RequestInterceptor
 import ru.unit.tjournaltest.data.api.interceptor.ResponseInterceptor
 
@@ -38,11 +38,13 @@ object ApiModule {
 
     @Provides
     fun provideServiceApiV1(
-        builder: Retrofit.Builder
-    ): TJournalServiceV1 = builder.baseUrl(TJournal.addressApiV1).build().create(TJournalServiceV1::class.java)
+        builder: Retrofit.Builder,
+        apiConfig: ApiConfig
+    ): ApiServiceV1 = builder.baseUrl(apiConfig.addressApiV1).build().create(ApiServiceV1::class.java)
 
     @Provides
     fun provideServiceApiV2(
-        builder: Retrofit.Builder
-    ): TJournalServiceV2 = builder.baseUrl(TJournal.addressApiV2).build().create(TJournalServiceV2::class.java)
+        builder: Retrofit.Builder,
+        apiConfig: ApiConfig
+    ): ApiServiceV2 = builder.baseUrl(apiConfig.addressApiV2).build().create(ApiServiceV2::class.java)
 }

@@ -4,7 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.unit.tjournaltest.data.api.dto.TimelineResponseDTO
 
-interface TJournalServiceV2 {
+interface ApiServiceV2 {
     @GET("timeline")
     suspend fun videoAndGifs(
         @Query("subsitesIds") subsitesIds: String,

@@ -1,6 +1,5 @@
 package ru.unit.tjournaltest.data.notification
 
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context

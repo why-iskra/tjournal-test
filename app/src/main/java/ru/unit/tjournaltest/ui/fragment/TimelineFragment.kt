@@ -26,7 +26,7 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.findViewById<TextView>(R.id.textViewTitle)?.text = getString(R.string.video_and_gifs)
+        activity?.findViewById<TextView>(R.id.textViewTitle)?.text = model.getSubsiteName()
 
         val binding = FragmentTimelineBinding.bind(view)
 

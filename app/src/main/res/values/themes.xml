@@ -4,8 +4,8 @@
         <!-- Surface color. -->
         <item name="colorSurface">@color/white</item>
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/orange_50</item>
-        <item name="colorPrimaryVariant">@color/orange_200</item>
+        <item name="colorPrimary">@color/style_app_color_light</item>
+        <item name="colorPrimaryVariant">@color/style_app_color</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <!--        <item name="colorSecondary">@color/black_900</item>-->

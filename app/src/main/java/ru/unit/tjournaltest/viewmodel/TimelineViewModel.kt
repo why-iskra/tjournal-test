@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import ru.unit.tjournaltest.data.DataConfig
 import ru.unit.tjournaltest.domain.timeline.TimelineUseCase
 import ru.unit.tjournaltest.domain.timeline.pojo.TimelineItemPOJO
 import ru.unit.tjournaltest.paging.source.TimelinePagingSource
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimelineViewModel @Inject constructor(
-    private val timelineUseCase: TimelineUseCase
+    private val timelineUseCase: TimelineUseCase,
+    private val dataConfig: DataConfig
 ) : ViewModel() {
 
     val timelineItemsFlow: Flow<PagingData<TimelineItemPOJO>> = Pager(
@@ -27,7 +29,9 @@ class TimelineViewModel @Inject constructor(
 
     fun refresh() {
         viewModelScope.launch(Dispatchers.IO) {
-            timelineUseCase.clearVideoAndGifs()
+            timelineUseCase.clearSubsite()
         }
     }
+
+    fun getSubsiteName() = dataConfig.subsiteName
 }

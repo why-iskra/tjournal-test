@@ -38,7 +38,6 @@ class MessageNotification @Inject constructor(
         }
     }
 
-    @SuppressLint("ObsoleteSdkInt")
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.message_channel_name)

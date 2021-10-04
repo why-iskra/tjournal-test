@@ -19,9 +19,6 @@ import ru.unit.tjournaltest.domain.timeline.pojo.TimelineTypeVideoPOJO
 import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.other.dateCountdown
 import ru.unit.tjournaltest.other.humanNumber
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.util.*
 
 class TimelineAdapter(
     recyclerView: RecyclerView,

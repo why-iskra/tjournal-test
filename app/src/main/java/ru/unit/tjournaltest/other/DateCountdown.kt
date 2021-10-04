@@ -7,7 +7,7 @@ import java.util.*
 fun dateCountdown(context: Context, startSeconds: Long): String {
     val current = Calendar.getInstance()
     val start = Calendar.getInstance().apply { timeInMillis = startSeconds * 1000 }
-    
+
     val differenceSecond = current.get(Calendar.SECOND) - start.get(Calendar.SECOND)
     val differenceMinute = current.get(Calendar.MINUTE) - start.get(Calendar.MINUTE)
     val differenceHour = current.get(Calendar.HOUR) - start.get(Calendar.HOUR)

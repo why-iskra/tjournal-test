@@ -4,8 +4,8 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class SocketEventFlow()
+annotation class SocketEventFlow
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class SocketStateFlow()
+annotation class SocketStateFlow

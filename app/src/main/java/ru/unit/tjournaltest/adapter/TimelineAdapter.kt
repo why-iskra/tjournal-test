@@ -24,7 +24,6 @@ import java.time.ZoneOffset
 
 class TimelineAdapter(
     recyclerView: RecyclerView,
-    private var currentDate: LocalDateTime,
 ) : PagingDataAdapter<TimelineItemPOJO, TimelineViewHolder>(object : DiffUtil.ItemCallback<TimelineItemPOJO>() {
     override fun areItemsTheSame(oldItem: TimelineItemPOJO, newItem: TimelineItemPOJO): Boolean {
         return oldItem.id == newItem.id
@@ -122,7 +121,7 @@ class TimelineAdapter(
         holder.binding.textViewRating.text = humanNumber(item.rating)
         holder.binding.textViewTime.text =
             holder.binding.root.context?.let {
-                dateCountdown(it, LocalDateTime.ofEpochSecond(item.date, 0, ZoneOffset.UTC), currentDate)
+                dateCountdown(it, LocalDateTime.ofEpochSecond(item.date, 0, ZoneOffset.UTC), LocalDateTime.now())
             }
 
         holder.binding.textViewTitle.visibility = if (item.title.isNullOrEmpty()) View.GONE else View.VISIBLE

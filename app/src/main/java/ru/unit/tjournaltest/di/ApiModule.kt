@@ -5,8 +5,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.unit.tjournaltest.BuildConfig
 import ru.unit.tjournaltest.data.api.TJournal
 import ru.unit.tjournaltest.data.api.TJournalServiceV1
 import ru.unit.tjournaltest.data.api.TJournalServiceV2
@@ -22,6 +24,9 @@ object ApiModule {
         requestInterceptor: RequestInterceptor,
         responseInterceptor: ResponseInterceptor
     ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        })
         .addInterceptor(requestInterceptor)
         .addInterceptor(responseInterceptor)
         .build()

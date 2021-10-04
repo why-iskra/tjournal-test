@@ -8,29 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
-import ru.unit.tjournaltest.data.json.annotation.GsonBeautiful
-import ru.unit.tjournaltest.data.notification.MessageNotification
-import ru.unit.tjournaltest.data.sharedpreferences.SharedPreferencesAuth
 import ru.unit.tjournaltest.data.socket.SocketState
 import ru.unit.tjournaltest.viewmodel.MainViewModel
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var authPreferences: SharedPreferencesAuth
-
-    @Inject
-    lateinit var messageNotification: MessageNotification
-
-    @Inject
-    @GsonBeautiful
-    lateinit var gson: Gson
 
     private val model: MainViewModel by viewModels()
 
@@ -45,25 +31,15 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.timelineFragment -> navigationController.navigate(R.id.timelineFragment)
                 R.id.accountFragment -> {
-                    if (authPreferences.xDeviceToken.isNullOrEmpty()) {
-                        navigationController.navigate(R.id.loginFragment)
-                    } else {
+                    if (model.isAuthorized()) {
                         navigationController.navigate(R.id.accountFragment)
+                    } else {
+                        navigationController.navigate(R.id.loginFragment)
                     }
                 }
             }
 
             true
-        }
-
-        lifecycleScope.launch {
-            model.socketEventFlow.collectLatest {
-                val result = model.getMessage(it)
-
-                if (!(result.first.isEmpty() && result.second.isEmpty())) {
-                    messageNotification.createNotification(result.first, result.second)
-                }
-            }
         }
 
         lifecycleScope.launch {

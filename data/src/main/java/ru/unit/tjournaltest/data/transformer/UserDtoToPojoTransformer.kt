@@ -19,6 +19,6 @@ class UserDtoToPojoTransformer @Inject constructor() : BaseTransformer<UserRespo
             )
         }
 
-        return UserPOJO(value.message, value.success, result)
+        return UserPOJO(value.message ?: "", result != null, result)
     }
 }

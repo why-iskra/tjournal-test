@@ -38,4 +38,6 @@
 
     <string name="fail">Ошибка</string>
     <string name="logout">Выйти</string>
+
+    <string name="something_went_wrong">Что-то пошло не так</string>
 </resources>

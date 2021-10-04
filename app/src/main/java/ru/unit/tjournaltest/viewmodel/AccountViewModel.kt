@@ -6,15 +6,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import ru.unit.tjournaltest.data.sharedpreferences.SharedPreferencesAuth
 import ru.unit.tjournaltest.domain.user.UserUseCase
 import ru.unit.tjournaltest.domain.user.pojo.UserPOJO
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    private val userUseCase: UserUseCase,
-    private val preferencesAuth: SharedPreferencesAuth
+    private val userUseCase: UserUseCase
 ) : ViewModel() {
 
     val userMeFlow = MutableStateFlow<UserPOJO?>(null)
@@ -49,10 +47,10 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun isAuthorized() = !preferencesAuth.xDeviceToken.isNullOrEmpty()
+    fun isAuthorized() = userUseCase.isAuthorized()
 
     fun logout() {
-        preferencesAuth.xDeviceToken = ""
+        userUseCase.logout()
     }
 
     enum class State {

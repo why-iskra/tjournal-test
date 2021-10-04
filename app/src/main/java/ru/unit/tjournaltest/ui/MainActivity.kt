@@ -1,18 +1,24 @@
 package ru.unit.tjournaltest.ui
 
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
-import ru.unit.tjournaltest.data.sharedpreferences.SharedPreferencesAuth
-import javax.inject.Inject
+import ru.unit.tjournaltest.data.socket.SocketState
+import ru.unit.tjournaltest.viewmodel.MainViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var authPreferences: SharedPreferencesAuth
+
+    private val model: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +31,10 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.timelineFragment -> navigationController.navigate(R.id.timelineFragment)
                 R.id.accountFragment -> {
-                    if (authPreferences.xDeviceToken.isNullOrEmpty()) {
-                        navigationController.navigate(R.id.loginFragment)
-                    } else {
+                    if (model.isAuthorized()) {
                         navigationController.navigate(R.id.accountFragment)
+                    } else {
+                        navigationController.navigate(R.id.loginFragment)
                     }
                 }
             }
@@ -36,6 +42,17 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        lifecycleScope.launch {
+            model.socketStateFlow.collectLatest {
+                if (it == SocketState.CONNECTION_ERROR || it == SocketState.EVENT_ERROR) {
+                    toast(R.string.something_went_wrong)
+                }
+            }
+        }
+    }
+
+    private fun toast(@StringRes message: Int) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 }

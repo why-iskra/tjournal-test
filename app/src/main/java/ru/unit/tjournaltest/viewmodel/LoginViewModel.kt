@@ -7,14 +7,12 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import ru.unit.tjournaltest.data.sharedpreferences.SharedPreferencesAuth
 import ru.unit.tjournaltest.domain.user.UserUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val userUseCase: UserUseCase,
-    private val preferencesAuth: SharedPreferencesAuth
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
@@ -29,7 +27,11 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             runCatching {
                 val result = userUseCase.login(login, password)
-                stateFlow.value = if (result.success) State.LOADED else State.ERROR_UNKNOWN
+                if (result == null) {
+                    stateFlow.value = State.ERROR_UNAUTHORIZED
+                } else {
+                    stateFlow.value = if (result.success) State.LOADED else State.ERROR_UNKNOWN
+                }
             }.onFailure {
                 it.printStackTrace()
                 stateFlow.value = State.ERROR_UNAUTHORIZED
@@ -37,7 +39,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun isAuthorized() = !preferencesAuth.xDeviceToken.isNullOrEmpty()
+    fun isAuthorized() = userUseCase.isAuthorized()
 
     enum class State {
         NOTHING,

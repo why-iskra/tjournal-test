@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "ru.unit.tjournaltest"
-        minSdk 26
+        minSdk 21
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -42,8 +42,12 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
+    //noinspection GradleDependency
+    implementation "io.socket:socket.io-client:$socket_io_version"
+
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
     implementation "com.squareup.picasso:picasso:$picasso_version"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:$androidyoutubeplayer_version"

@@ -1,29 +1,30 @@
 package ru.unit.tjournaltest.data.sharedpreferences
 
+import com.google.gson.Gson
+import ru.unit.tjournaltest.data.json.annotation.GsonSimple
+import ru.unit.tjournaltest.domain.user.pojo.UserPOJO
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SharedPreferencesUser @Inject constructor(
-    private val preferences: SharedPreferencesHelper
+    private val preferences: SharedPreferencesHelper,
+    @GsonSimple private val gson: Gson
 ) {
-    var avatarUrl
-        get() = preferences.get().getString(SharedPreferencesHelper.AVATAR_URL_KEY, "")
-        set(value) = preferences.edit().putString(SharedPreferencesHelper.AVATAR_URL_KEY, value).apply()
-
-    var name
-        get() = preferences.get().getString(SharedPreferencesHelper.NAME_KEY, "")
-        set(value) = preferences.edit().putString(SharedPreferencesHelper.NAME_KEY, value).apply()
-
-    var karma
-        get() = preferences.get().getInt(SharedPreferencesHelper.KARMA_KEY, 0)
-        set(value) = preferences.edit().putInt(SharedPreferencesHelper.KARMA_KEY, value).apply()
+    var userMe: UserPOJO?
+        get() {
+            val json = preferences.get().getString(SharedPreferencesHelper.USER_ME_KEY, "")
+            if (json.isNullOrEmpty()) {
+                return null
+            } else {
+                return gson.fromJson(json, UserPOJO::class.java)
+            }
+        }
+        set(value) = preferences.edit().putString(SharedPreferencesHelper.USER_ME_KEY, gson.toJson(value)).apply()
 
     fun clear() {
         preferences.edit()
-            .remove(SharedPreferencesHelper.AVATAR_URL_KEY)
-            .remove(SharedPreferencesHelper.NAME_KEY)
-            .remove(SharedPreferencesHelper.KARMA_KEY)
+            .remove(SharedPreferencesHelper.USER_ME_KEY)
             .apply()
     }
 }

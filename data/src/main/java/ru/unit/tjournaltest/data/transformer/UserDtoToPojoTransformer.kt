@@ -13,10 +13,12 @@ class UserDtoToPojoTransformer @Inject constructor() : BaseTransformer<UserRespo
             result = UserResultPOJO(
                 resultApi.name,
                 resultApi.karma,
-                resultApi.avatarUrl
+                resultApi.avatarUrl,
+                resultApi.mHash,
+                resultApi.userHash
             )
         }
 
-        return UserPOJO(value.message, value.success, result)
+        return UserPOJO(value.message ?: "", result != null, result)
     }
 }

@@ -2,71 +2,25 @@ package ru.unit.tjournaltest.other
 
 import android.content.Context
 import ru.unit.tjournaltest.R
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
+import java.util.*
 
-fun dateCountdown(context: Context, start: LocalDateTime, current: LocalDateTime): String {
-    val differenceSecond: Long = ChronoUnit.SECONDS.between(start, current)
-    val differenceMinute: Long = ChronoUnit.MINUTES.between(start, current)
-    val differenceHour: Long = ChronoUnit.HOURS.between(start, current)
-    val differenceDay: Long = ChronoUnit.DAYS.between(start, current)
-    val differenceMonth: Long = ChronoUnit.MONTHS.between(start, current)
-    val differenceYear: Long = ChronoUnit.YEARS.between(start, current)
+fun dateCountdown(context: Context, startSeconds: Long): String {
+    val current = Calendar.getInstance()
+    val start = Calendar.getInstance().apply { timeInMillis = startSeconds * 1000 }
 
-    when {
-        differenceYear > 0 -> {
-            return "%d %s".format(
-                differenceYear, when (differenceYear) {
-                    1L -> context.resources.getString(R.string.year)
-                    2L, 3L, 4L -> context.resources.getString(R.string.years)
-                    else -> context.resources.getString(R.string.yearsAfterFour)
-                }
-            )
-        }
-        differenceMonth > 30 -> {
-            return "%d %s".format(
-                differenceMonth, when (differenceMonth) {
-                    1L -> context.resources.getString(R.string.month)
-                    2L, 3L, 4L -> context.resources.getString(R.string.months)
-                    else -> context.resources.getString(R.string.monthsAfterFour)
-                }
-            )
-        }
-        differenceDay > 0 -> {
-            return "%d %s".format(
-                differenceDay, when (differenceDay) {
-                    1L -> context.resources.getString(R.string.day)
-                    2L, 3L, 4L -> context.resources.getString(R.string.days)
-                    else -> context.resources.getString(R.string.daysAfterFour)
-                }
-            )
-        }
-        differenceHour > 0 -> {
-            return "%d %s".format(
-                differenceHour, when (differenceHour) {
-                    1L -> context.resources.getString(R.string.hour)
-                    2L, 3L, 4L -> context.resources.getString(R.string.hours)
-                    else -> context.resources.getString(R.string.hoursAfterFour)
-                }
-            )
-        }
-        differenceMinute > 0 -> {
-            return "%d %s".format(
-                differenceMinute, when (differenceMinute) {
-                    1L -> context.resources.getString(R.string.minute)
-                    2L, 3L, 4L -> context.resources.getString(R.string.minutes)
-                    else -> context.resources.getString(R.string.minutesAfterFour)
-                }
-            )
-        }
-        else -> {
-            return "%d %s".format(
-                differenceSecond, when (differenceSecond) {
-                    1L -> context.resources.getString(R.string.second)
-                    2L, 3L, 4L -> context.resources.getString(R.string.seconds)
-                    else -> context.resources.getString(R.string.secondsAfterFour)
-                }
-            )
-        }
+    val differenceSecond = current.get(Calendar.SECOND) - start.get(Calendar.SECOND)
+    val differenceMinute = current.get(Calendar.MINUTE) - start.get(Calendar.MINUTE)
+    val differenceHour = current.get(Calendar.HOUR) - start.get(Calendar.HOUR)
+    val differenceDay = current.get(Calendar.DAY_OF_YEAR) - start.get(Calendar.DAY_OF_YEAR)
+    val differenceMonth = current.get(Calendar.MONTH) - start.get(Calendar.MONTH)
+    val differenceYear = current.get(Calendar.YEAR) - start.get(Calendar.YEAR)
+
+    return when {
+        differenceYear > 0 -> "%d %s".format(differenceYear, context.resources.getQuantityString(R.plurals.plural_year, differenceYear))
+        differenceMonth > 0 -> "%d %s".format(differenceMonth, context.resources.getQuantityString(R.plurals.plural_month, differenceMonth))
+        differenceDay > 0 -> "%d %s".format(differenceDay, context.resources.getQuantityString(R.plurals.plural_day, differenceDay))
+        differenceHour > 0 -> "%d %s".format(differenceHour, context.resources.getQuantityString(R.plurals.plural_hour, differenceHour))
+        differenceMinute > 0 -> "%d %s".format(differenceMinute, context.resources.getQuantityString(R.plurals.plural_minute, differenceMinute))
+        else -> "%d %s".format(differenceSecond, context.resources.getQuantityString(R.plurals.plural_second, differenceSecond))
     }
 }

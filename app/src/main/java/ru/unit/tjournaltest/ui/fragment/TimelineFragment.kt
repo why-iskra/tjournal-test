@@ -15,7 +15,6 @@ import ru.unit.tjournaltest.R
 import ru.unit.tjournaltest.adapter.TimelineAdapter
 import ru.unit.tjournaltest.databinding.FragmentTimelineBinding
 import ru.unit.tjournaltest.viewmodel.TimelineViewModel
-import java.time.LocalDateTime
 
 @AndroidEntryPoint
 class TimelineFragment : Fragment(R.layout.fragment_timeline) {
@@ -35,7 +34,7 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline) {
         binding.recyclerViewTimeLine.layoutManager = LinearLayoutManager(context)
         binding.recyclerViewTimeLine.overScrollMode = View.OVER_SCROLL_NEVER
         if (!this::adapter.isInitialized) {
-            adapter = TimelineAdapter(binding.recyclerViewTimeLine, LocalDateTime.now())
+            adapter = TimelineAdapter(binding.recyclerViewTimeLine)
         }
         adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
 

@@ -4,7 +4,9 @@ import ru.unit.tjournaltest.domain.user.pojo.UserPOJO
 import javax.inject.Inject
 
 interface UserUseCase {
-    suspend fun login(login: String, password: String): UserPOJO
+    suspend fun login(login: String, password: String): UserPOJO?
+    fun logout()
+    fun isAuthorized(): Boolean
     suspend fun getUserMe(): UserPOJO
     suspend fun clearUserMe()
 }
@@ -13,12 +15,19 @@ class UserUseCaseImpl @Inject constructor(
     private val userRepository: UserRepository,
     private val userService: UserService
 ) : UserUseCase {
-    override suspend fun login(login: String, password: String): UserPOJO {
+    override suspend fun login(login: String, password: String): UserPOJO? {
         val apiResult = userService.login(login, password)
-        userRepository.putUserMe(apiResult)
-
-        return apiResult
+        return if (isAuthorized()) {
+            userRepository.setUserMe(apiResult)
+            apiResult
+        } else null
     }
+
+    override fun logout() {
+        userRepository.setXDeviceToken("")
+    }
+
+    override fun isAuthorized(): Boolean = !userRepository.getXDeviceToken().isNullOrEmpty()
 
     override suspend fun getUserMe(): UserPOJO {
         val cacheResult = userRepository.getUserMe()
@@ -27,7 +36,7 @@ class UserUseCaseImpl @Inject constructor(
         }
 
         val apiResult = userService.getUserMe()
-        userRepository.putUserMe(apiResult)
+        userRepository.setUserMe(apiResult)
 
         return apiResult
     }

@@ -41,7 +41,7 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-        viewModelScope.launch(Dispatchers.IO) { // fixme: notification does not work
+        viewModelScope.launch(Dispatchers.IO) {
             socket.connect()
         }
     }

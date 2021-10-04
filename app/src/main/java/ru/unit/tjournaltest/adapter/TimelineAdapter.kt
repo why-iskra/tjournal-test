@@ -21,6 +21,7 @@ import ru.unit.tjournaltest.other.dateCountdown
 import ru.unit.tjournaltest.other.humanNumber
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.util.*
 
 class TimelineAdapter(
     recyclerView: RecyclerView,
@@ -121,7 +122,7 @@ class TimelineAdapter(
         holder.binding.textViewRating.text = humanNumber(item.rating)
         holder.binding.textViewTime.text =
             holder.binding.root.context?.let {
-                dateCountdown(it, LocalDateTime.ofEpochSecond(item.date, 0, ZoneOffset.UTC), LocalDateTime.now())
+                dateCountdown(it, item.date)
             }
 
         holder.binding.textViewTitle.visibility = if (item.title.isNullOrEmpty()) View.GONE else View.VISIBLE

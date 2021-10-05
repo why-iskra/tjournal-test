@@ -53,6 +53,8 @@ class AccountViewModel @Inject constructor(
         userUseCase.logout()
     }
 
+    fun getUserName(): String? = userMeFlow.value?.result?.name
+
     enum class State {
         NOTHING,
         LOADING,

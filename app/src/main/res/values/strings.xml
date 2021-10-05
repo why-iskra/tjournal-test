@@ -12,4 +12,7 @@
     <string name="logout">Выйти</string>
 
     <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="send">Отправить</string>
+
+    <string name="app_message">%s открыл приложение %s</string>
 </resources>

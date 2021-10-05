@@ -12,9 +12,7 @@ class AppMessageBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
         const val FIELD_MESSAGE = "message"
     }
 
-    override fun onReceive(context: Context?, intent: Intent?) {
-        intent ?: return
-        context ?: return
+    override fun onReceive(context: Context, intent: Intent) {
         val message = intent.getStringExtra(FIELD_MESSAGE) ?: return
 
         if (intent.action == AppMessageBroadcastActions.ACTION_RECEIVE_APP_NOTIFICATION) {

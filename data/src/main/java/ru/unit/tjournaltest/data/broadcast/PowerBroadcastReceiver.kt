@@ -8,10 +8,7 @@ import ru.unit.tjournaltest.data.R
 import javax.inject.Inject
 
 class PowerBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        intent ?: return
-        context ?: return
-
+    override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_POWER_CONNECTED) {
             Toast.makeText(context, R.string.power_connected_action_message, Toast.LENGTH_SHORT).show()
         } else if (intent.action == Intent.ACTION_POWER_DISCONNECTED) {

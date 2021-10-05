@@ -7,4 +7,6 @@ class DataConfig @Inject constructor() {
     val baseSocketHost = "https://ws-sio.vc.ru"
     val subsiteId = 199114
     val subsiteName = "Дизайн"
+
+    val productFlavor = ProductFlavors.VC
 }

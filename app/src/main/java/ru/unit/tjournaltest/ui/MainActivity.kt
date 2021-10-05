@@ -1,5 +1,7 @@
 package ru.unit.tjournaltest.ui
 
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -12,17 +14,37 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
+import ru.unit.tjournaltest.data.AppMessageBroadcastActions
+import ru.unit.tjournaltest.data.broadcast.AppMessageBroadcastReceiver
+import ru.unit.tjournaltest.data.broadcast.PowerBroadcastReceiver
 import ru.unit.tjournaltest.data.socket.SocketState
 import ru.unit.tjournaltest.viewmodel.MainViewModel
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var powerBroadcastReceiver: PowerBroadcastReceiver
+
+    @Inject
+    lateinit var messageBroadcastReceiver: AppMessageBroadcastReceiver
 
     private val model: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val powerIntentFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_POWER_CONNECTED)
+            addAction(Intent.ACTION_POWER_DISCONNECTED)
+        }
+        registerReceiver(powerBroadcastReceiver, powerIntentFilter)
+        val messageIntentFilter = IntentFilter().apply {
+            addAction(AppMessageBroadcastActions.ACTION_RECEIVE_APP_NOTIFICATION)
+        }
+        registerReceiver(messageBroadcastReceiver, messageIntentFilter)
 
         val navigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         val navigationController = (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment).navController
@@ -49,6 +71,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(powerBroadcastReceiver)
+        unregisterReceiver(messageBroadcastReceiver)
     }
 
     private fun toast(@StringRes message: Int) {

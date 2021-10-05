@@ -2,4 +2,7 @@
 <resources>
     <string name="message_channel_name">Сообщения</string>
     <string name="message_channel_description">Канал с сообщениями</string>
+
+    <string name="power_connected_action_message">Телефон обрёл мощь тора</string>
+    <string name="power_disconnected_action_message">Телефон потерял мощь тора</string>
 </resources>

@@ -1,5 +1,6 @@
 package ru.unit.tjournaltest.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -15,6 +16,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.unit.tjournaltest.R
+import ru.unit.tjournaltest.data.AppMessageBroadcastActions
+import ru.unit.tjournaltest.data.broadcast.AppMessageBroadcastReceiver
 import ru.unit.tjournaltest.databinding.FragmentAccountBinding
 import ru.unit.tjournaltest.other.RoundCornersTransform
 import ru.unit.tjournaltest.viewmodel.AccountViewModel
@@ -75,7 +78,19 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
             findNavController().navigate(R.id.action_accountFragment_to_loginFragment)
         }
 
+        binding.sendButton.setOnClickListener { context?.applicationContext?.sendBroadcast(getIntent()) }
+
         model.loadUserMe()
+    }
+
+    private fun getIntent(): Intent {
+        val intent = Intent(AppMessageBroadcastActions.ACTION_SEND_APP_NOTIFICATION)
+        val raw = getString(R.string.app_message)
+        val user = model.getUserName()
+        val app = getString(R.string.app_name)
+        val message = raw.format(user, app)
+        intent.putExtra(AppMessageBroadcastReceiver.FIELD_MESSAGE, message)
+        return intent
     }
 
 }
